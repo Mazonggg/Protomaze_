@@ -18,17 +18,25 @@ public class LogInUser : MonoBehaviour {
 
 		Constants.NetworkRoutines.TCPRequest(
 			HandleLogin, 
-			"loginUser",
-			new string[] {"userName", "pwd"},
-			new string[] {name, pwd});
+			new string[] {"req", "userName", "pwd"},
+			new string[] {"loginUser", name, pwd});
 	}
 		
-	private void HandleLogin (int userId, string name){
+	private void HandleLogin (string[][] response){
 
 		logInCanvas.SetActive (false);
 		mainMenuCanvas.SetActive (true);
 
-		Constants.UserHandler.ThisUser.Id = userId;
-		Constants.UserHandler.ThisUser.ObjectName = name;
+        int IdTmp = -1;
+
+        foreach( string[] pair in response) {
+            
+            if (pair[0].Equals("userId")) {
+                int.TryParse(pair[1], out IdTmp);
+            }
+        }
+
+        Constants.UserHandler.ThisUser.Id = IdTmp;
+		Constants.UserHandler.ThisUser.ObjectName = inputName.GetComponent<InputField>().text;
 	}
 }

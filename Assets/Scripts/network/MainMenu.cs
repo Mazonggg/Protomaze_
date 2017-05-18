@@ -7,8 +7,7 @@ using System;
 
 public class MainMenu : MonoBehaviour {
 
-	public GameObject logInCanvas, mainMenuCanvas;
-
+	public GameObject logInCanvas, mainMenuCanvas, startSessionButton;
 
 	void Start(){
 		mainMenuCanvas.SetActive (false);
@@ -17,24 +16,47 @@ public class MainMenu : MonoBehaviour {
 	public void LogoutUser() {
 		
 		string userId = Constants.UserHandler.ThisUser.Id.ToString();
+        Debug.Log("LogoutUser: " + userId);
 
 		Constants.NetworkRoutines.TCPRequest(
-			null, 
-			"logoutUser",
-			new string[] {"userId"},
-			new string[] {userId});
+            HandleLogout, 
+			new string[] {"req", "userId"},
+			new string[] {"logoutUser", userId});
+	}
+
+	private void HandleLogout(string[][] response) {
+
+        logInCanvas.SetActive(true);
+		mainMenuCanvas.SetActive(false);
+
+		Constants.UserHandler.ThisUser.Id = -1;
+		Constants.UserHandler.ThisUser.ObjectName = "default";
 	}
 
 	public void StartSession() {
 
-		string userId = Constants.UserHandler.ThisUser.Id.ToString();
+        int IdTmp = Constants.UserHandler.ThisUser.Id;
+        Debug.Log("IdTmp in StartSession: " + IdTmp);
+        string userId = IdTmp.ToString();
 
 		Constants.NetworkRoutines.TCPRequest(
-			null, 
-			"startSession",
-			new string[] {"userId"},
-			new string[] {userId});
+            AssignSessionToUser, 
+			new string[] {"req", "userId"},
+			new string[] {"startSession", userId});
 	}
+
+    private void AssignSessionToUser(string[][] response) {
+
+        int SsIdTmp = -1;
+
+        foreach (string[] pair in response) {
+            if(pair[0].Equals("sessionId")) {
+                int.TryParse(pair[1], out SsIdTmp);
+            }
+        }
+        Constants.UserHandler.ThisUser.SsId = SsIdTmp;
+        startSessionButton.SetActive(false);
+    }
 
 	private void RequestLogout(string userId) {
 		

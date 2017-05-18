@@ -6,15 +6,21 @@ public class GObject : MonoBehaviour {
 
 	private BoxCollider boxCollider;
 	private int id = -1;
+	public int Id
+	{
+		get { return id; }
+		set { id = value; Debug.Log("Id=" + value); }
+	}
 	private string objectName = "default";
 	public string ObjectName{
 		get { return objectName; }
-		set { objectName = value; name = value; }
+        set { objectName = value; Debug.Log("ObjectName=" + value); }
 	}
-	public int Id {
-		get { return id; }
-		set { id = value; }
-	}
+    private int ssId = -1;
+    public int SsId {
+        get { return ssId; }
+        set { ssId = value; Debug.Log("ssId=" + ssId); }
+    }
 	// Use this for initialization
 	void Start () {
 		boxCollider = GetComponent<BoxCollider>();
