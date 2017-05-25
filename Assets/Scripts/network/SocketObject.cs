@@ -11,12 +11,14 @@ using System.Net.Sockets;
 /// <summary>
 /// Handles all communication with the server.
 /// </summary>
-class SocketObject {
+public class SocketObject {
 
 	private static string serverError = "Error";
 
 	private Thread socketThread;
 	private Socket socket;
+
+    private int test = 0;
 
 	private static int port = 6666;
 	private static IPAddress IPv4 = new IPAddress(new byte[]{81, 169, 245, 94});
@@ -27,16 +29,20 @@ class SocketObject {
 
 		// Create the socket, that communicates with server.
 		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-		// Transmitted data
-		byte[] sendbuf = Encoding.ASCII.GetBytes("userName=Protofox,pwd=" + Constants.NetworkRoutines.Md5Sum("Protofox"));
-	}
+       
+
+    }
 
 	/*
 	 * Runs the Thread.
 	 * 
 	 * // TODO necassarily public???
 	 */
-	public void WorkOnSocket(){
+	public string WorkOnSocket(){
 
-	}
+        // Transmitted data
+        byte[] sendbuf = Encoding.ASCII.GetBytes("Hallo Server:" + test++);
+        socket.Send(sendbuf);
+        return test.ToString();
+    }
 }

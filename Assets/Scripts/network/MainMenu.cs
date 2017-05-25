@@ -28,8 +28,9 @@ public class MainMenu : MonoBehaviour {
 
         logInCanvas.SetActive(true);
 		mainMenuCanvas.SetActive(false);
+        startSessionButton.SetActive(true);
 
-		Constants.UserHandler.ThisUser.Id = -1;
+        Constants.UserHandler.ThisUser.Id = -1;
 		Constants.UserHandler.ThisUser.ObjectName = "default";
 	}
 
