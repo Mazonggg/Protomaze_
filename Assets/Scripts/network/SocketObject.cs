@@ -19,9 +19,10 @@ public class SocketObject {
 	private Socket socket;
 
     private int test = 0;
+    private bool active = true;
 
-	private static int port = 6666;
-	private static IPAddress IPv4 = new IPAddress(new byte[]{81, 169, 245, 94});
+	private static int port = 8050;
+	private static IPAddress IPv4 = IPAddress.Parse("81.169.245.94");
 
 	private IPEndPoint endPoint = new IPEndPoint(IPv4, port);
 
@@ -29,20 +30,24 @@ public class SocketObject {
 
 		// Create the socket, that communicates with server.
 		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-       
-
     }
 
-	/*
-	 * Runs the Thread.
-	 * 
-	 * // TODO necassarily public???
-	 */
-	public string WorkOnSocket(){
+    float timeStamp = 0, interval = 10;
 
-        // Transmitted data
-        byte[] sendbuf = Encoding.ASCII.GetBytes("Hallo Server:" + test++);
-        socket.Send(sendbuf);
-        return test.ToString();
+	public void WorkOnSocket(){
+
+        //while(active){
+
+			// Automatisch in Intervallen Socket ansprechen.
+			if (Time.realtimeSinceStartup >= timeStamp + interval)
+			{
+
+				timeStamp = Time.realtimeSinceStartup;
+				Debug.Log ("WorkOnSocket");
+				// Transmitted data
+				byte[] sendbuf = System.Text.ASCIIEncoding.ASCII.GetBytes("Hallo Server:" + test++);
+				socket.SendTo(sendbuf, endPoint);
+			}
+       // }
     }
 }

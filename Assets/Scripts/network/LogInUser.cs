@@ -24,19 +24,20 @@ public class LogInUser : MonoBehaviour {
 		
 	private void HandleLogin (string[][] response){
 
-		logInCanvas.SetActive (false);
-		mainMenuCanvas.SetActive (true);
-
-        int IdTmp = -1;
-
         foreach( string[] pair in response) {
-            
-            if (pair[0].Equals("userId")) {
-                int.TryParse(pair[1], out IdTmp);
+
+			if (pair[0].Equals("userId")) {
+				
+                int IdTmp = -1;
+				int.TryParse(pair[1], out IdTmp);
+				logInCanvas.SetActive(false);
+				mainMenuCanvas.SetActive(true);
+
+				Constants.UserHandler.ThisUser.Id = IdTmp;
+				Constants.UserHandler.ThisUser.ObjectName = inputName.GetComponent<InputField>().text;
+
+                return;
             }
         }
-
-        Constants.UserHandler.ThisUser.Id = IdTmp;
-		Constants.UserHandler.ThisUser.ObjectName = inputName.GetComponent<InputField>().text;
 	}
 }

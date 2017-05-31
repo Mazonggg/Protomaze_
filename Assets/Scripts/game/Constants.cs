@@ -12,4 +12,5 @@ public sealed class Constants {
 
 	public static UserHandler UserHandler;
 	public static NetworkRoutines NetworkRoutines;
+	public static SocketObject SocketObject;
 }

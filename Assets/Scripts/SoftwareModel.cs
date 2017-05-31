@@ -25,26 +25,9 @@ public class SoftwareModel : MonoBehaviour {
 		
 		gameObject.AddComponent<User> ();
 		userHandler = new UserHandler (gameObject.GetComponent<User>());
+		socketObj = new SocketObject ();
 		Constants.UserHandler = userHandler;
 		Constants.NetworkRoutines = gameObject.AddComponent<NetworkRoutines> ();
+		Constants.SocketObject = socketObj;
 	}
-
-    float timeStamp = 0;
-    float interval = 10;
-    string testMsg = "";
-    void Update() {
-        // Automatisch in Intervallen Socket ansprechen.
-        if(Time.realtimeSinceStartup >= timeStamp + interval) {
-
-            timeStamp = Time.realtimeSinceStartup;
-            if (socketObj != null) {
-
-                testMsg = socketObj.WorkOnSocket();
-                Debug.Log("Socket: Work: " + testMsg);
-            } else {
-
-                Debug.Log("Socket: Sleep;");
-            }
-        }
-    }
 }

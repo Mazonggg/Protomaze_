@@ -57,16 +57,11 @@ public class MainMenu : MonoBehaviour {
         }
         Constants.UserHandler.ThisUser.SsId = SsIdTmp;
         startSessionButton.SetActive(false);
+		Constants.SocketObject.WorkOnSocket();
     }
 
 	private void RequestLogout(string userId) {
 		
-
-		mainMenuCanvas.SetActive (false);
-		logInCanvas.SetActive (true);
-	}
-
-	private void RequestSessionStart(string userId) {
 
 		mainMenuCanvas.SetActive (false);
 		logInCanvas.SetActive (true);
