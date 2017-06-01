@@ -32,22 +32,35 @@ public class SocketObject {
 		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
     }
 
-    float timeStamp = 0, interval = 10;
+	private int maxTalk = 100;
+
+	private Timer timer;
 
 	public void WorkOnSocket(){
-
-        //while(active){
-
-			// Automatisch in Intervallen Socket ansprechen.
-			if (Time.realtimeSinceStartup >= timeStamp + interval)
+		
+		new Thread(() => 
 			{
+				Thread.CurrentThread.IsBackground = true; 
 
-				timeStamp = Time.realtimeSinceStartup;
-				Debug.Log ("WorkOnSocket");
-				// Transmitted data
-				byte[] sendbuf = System.Text.ASCIIEncoding.ASCII.GetBytes("Hallo Server:" + test++);
-				socket.SendTo(sendbuf, endPoint);
-			}
-       // }
+				TellSocket("Hallo Server:" + test++, 0);
+			}).Start();
+        
     }
+
+	private void TellSocket(string msg, int talks){
+
+		if (talks < maxTalk && active) {
+			Debug.Log ("WorkOnSocket");
+			// Transmitted data
+			byte[] sendbuf = System.Text.ASCIIEncoding.ASCII.GetBytes (msg);
+			int sendBytes = socket.SendTo (sendbuf, endPoint);
+			Debug.Log ("sendBytes = " + sendBytes);
+
+			Thread.Sleep (10000);
+			TalkToSocket (msg, talks++);
+			return;
+		}
+		active = false;
+		return;
+	}
 }

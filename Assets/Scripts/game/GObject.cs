@@ -16,6 +16,11 @@ public class GObject : MonoBehaviour {
 		get { return objectName; }
         set { objectName = value; Debug.Log("ObjectName=" + value); }
 	}
+	private bool active = false;
+	public bool Active {
+		get { return active; }
+		set { active = value; }
+	}
     private int ssId = -1;
     public int SsId {
         get { return ssId; }
