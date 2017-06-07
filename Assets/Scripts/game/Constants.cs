@@ -10,7 +10,5 @@ public sealed class Constants {
 	// Movement speed of Users.
 	public static float moveSpeed = 10f;
 
-	public static UserHandler UserHandler;
-	public static NetworkRoutines NetworkRoutines;
-	public static SocketObject SocketObject;
+	public static SoftwareModel SoftwareModel;
 }

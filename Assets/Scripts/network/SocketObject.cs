@@ -18,8 +18,13 @@ public class SocketObject {
 	private Thread socketThread;
 	private Socket socket;
 
+
     private int test = 0;
     private bool active = true;
+	public bool Active {
+		get { return active; }
+		set { active = value; }
+	}
 
 	private static int port = 8050;
 	private static IPAddress IPv4 = IPAddress.Parse("81.169.245.94");
@@ -32,35 +37,73 @@ public class SocketObject {
 		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
     }
 
-	private int maxTalk = 100;
-
-	private Timer timer;
-
 	public void WorkOnSocket(){
-		
-		new Thread(() => 
-			{
-				Thread.CurrentThread.IsBackground = true; 
 
-				TellSocket("Hallo Server:" + test++, 0);
-			}).Start();
-        
+		Constants.SoftwareModel.NetwRout.CheckSocket ();
+		Constants.SoftwareModel.StartCoroutine (TellSocket());
     }
 
-	private void TellSocket(string msg, int talks){
+	private IEnumerator TellSocket(){
 
-		if (talks < maxTalk && active) {
-			Debug.Log ("WorkOnSocket");
+		while (active) {
+			// Debug.Log ("WorkOnSocket");
 			// Transmitted data
-			byte[] sendbuf = System.Text.ASCIIEncoding.ASCII.GetBytes (msg);
-			int sendBytes = socket.SendTo (sendbuf, endPoint);
-			Debug.Log ("sendBytes = " + sendBytes);
-
-			Thread.Sleep (10000);
-			TalkToSocket (msg, talks++);
-			return;
+			if (Constants.SoftwareModel.UserHandler.ThisUser.Updated) {
+				byte[] sendbuf = System.Text.ASCIIEncoding.ASCII.GetBytes (CollectUserData ());
+				int sendBytes = socket.SendTo (sendbuf, endPoint);
+				// Debug.Log ("sendBytes = " + sendBytes);
+			} else {
+				// Debug.Log ("nothing changed");
+			}
+			// Limit number of calls during testing.
+			yield return new WaitForSeconds(0.2f);
+			TellSocket ();
 		}
+
 		active = false;
-		return;
+		yield return new WaitForSeconds(2.0f);
+	}
+
+	int counter = 0;
+	/// <summary>
+	/// Collects the data relevant for server update of this player and converts it to string convention.
+	/// </summary>
+	/// <returns>The user data.</returns>
+	private string CollectUserData() {
+
+		if (Constants.SoftwareModel.UserHandler.ThisUser.Updated) {
+			UpdateData userData = Constants.SoftwareModel.UserHandler.ThisUser.UpdateData;
+
+			string msg = "t=";
+			if (userData.ObjectHeld == null) {
+				msg += "1";
+			} else {
+				msg += "2";
+			}
+
+			msg += "&ui=" + userData.Id;
+			msg += "&up=" +
+			userData.Position.x + "_" +
+			userData.Position.y + "_" +
+				userData.Position.z + ";" +
+			userData.Rotation.x + "_" +
+			userData.Rotation.y + "_" +
+			userData.Rotation.z;
+
+			if (userData.ObjectHeld != null) {
+				msg += "&oi=" + userData.ObjectHeld.Id;
+				msg += "&op=" +
+					userData.ObjectHeld.Position.x + "_" +
+					userData.ObjectHeld.Position.y + "_" +
+					userData.ObjectHeld.Position.z + ";" +
+					userData.ObjectHeld.Rotation.x + "_" +
+					userData.ObjectHeld.Rotation.y + "_" +
+					userData.ObjectHeld.Rotation.z;
+			}
+
+			Debug.Log("CollectUserData: " + msg);
+			return msg;
+		}
+		return "";
 	}
 }

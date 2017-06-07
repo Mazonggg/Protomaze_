@@ -14,11 +14,16 @@ public class SoftwareModel : MonoBehaviour {
 	public UserHandler UserHandler {
 		get { return userHandler; }
 	}
-    private SocketObject socketObj;
-    public SocketObject SocketObj {
-        get { return socketObj; }
-        set { socketObj = value; }
-    }
+	private SocketObject socketObj;
+	public SocketObject SocketObj {
+		get { return socketObj; }
+		set { socketObj = value; }
+	}
+	private NetworkRoutines netwRout;
+	public NetworkRoutines NetwRout {
+		get { return netwRout; }
+		set { netwRout = value; }
+	}
 
     // Use this for initialization
     void Start () {
@@ -26,8 +31,7 @@ public class SoftwareModel : MonoBehaviour {
 		gameObject.AddComponent<User> ();
 		userHandler = new UserHandler (gameObject.GetComponent<User>());
 		socketObj = new SocketObject ();
-		Constants.UserHandler = userHandler;
-		Constants.NetworkRoutines = gameObject.AddComponent<NetworkRoutines> ();
-		Constants.SocketObject = socketObj;
+		netwRout = gameObject.AddComponent<NetworkRoutines> ();
+		Constants.SoftwareModel = this;
 	}
 }

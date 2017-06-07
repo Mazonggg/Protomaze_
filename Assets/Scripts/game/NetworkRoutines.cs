@@ -16,14 +16,23 @@ public class NetworkRoutines : MonoBehaviour {
 	private static string serverError = "Error:";
 	private static string serverResponse = "Response:";
 	private static string serverHint = "Hint:";
-	private static string serverRequest = "http://h2678361.stratoserver.net/scripts/connection.php";
+	private static string serverRequest = "http://h2678361.stratoserver.net/scripts/";
+	private static string connScript = "connection.php";
+	private static string socketScript = "socket.php";
 
 	private UnityWebRequest connection;
 
+	public void CheckSocket() {
+		
+		string request = SerializeRequest (serverRequest + socketScript, GenerateParams(new string[] {}, new string[] {}));
+		StartCoroutine (MakeRequest(LogCheckSocket, request));
+	}
+
+	private void LogCheckSocket(string[][] response){}
 
 	public void TCPRequest(Action<string[][]> callback, string[] keys, string[] values) {
         
-		string request = SerializeRequest (serverRequest, GenerateParams(keys, values));
+		string request = SerializeRequest (serverRequest + connScript, GenerateParams(keys, values));
 		StartCoroutine (MakeRequest(callback, request));
 	}
 	/// <summary>

@@ -12,9 +12,32 @@ public class User : GObject {
 		get { return isHost; }
 		set { isHost = value; }
 	}
-
-	void Start(){
-
+	private GObject objectHeld;
+	public GObject ObjectHeld {
+		get { return objectHeld; }
+		set { objectHeld = value; }
+	}
+	/// <summary>
+	/// Returns the relevant data for updating the server, for this object.
+	/// </summary>
+	/// <value>The update data.</value>
+	public UpdateData UpdateData {
+		get { 
+			Updated = false;
+			Debug.Log ("UpdateData: id = " + Id);
+			if (objectHeld == null) {
+				return new UpdateData (
+					Id, 
+					new Vector3 (transform.position.x, transform.position.y, transform.position.z), 
+					new Vector3 (transform.rotation.x, transform.rotation.y, transform.rotation.z)); 
+			} else {
+				return new UpdateData (
+					Id, 
+					new Vector3 (transform.position.x, transform.position.y, transform.position.z), 
+					new Vector3 (transform.rotation.x, transform.rotation.y, transform.rotation.z),
+					objectHeld.UpdateData); 
+			}
+		}
 	}
 
 	void FixedUpdate(){

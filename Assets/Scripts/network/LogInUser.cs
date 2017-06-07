@@ -14,9 +14,9 @@ public class LogInUser : MonoBehaviour {
 	public void LoginUser() {
 
 		string name = inputName.GetComponent<InputField>().text;
-		string pwd = Constants.NetworkRoutines.Md5Sum(inputPwd.GetComponent<InputField>().text);
+		string pwd = Constants.SoftwareModel.NetwRout.Md5Sum(inputPwd.GetComponent<InputField>().text);
 
-		Constants.NetworkRoutines.TCPRequest(
+		Constants.SoftwareModel.NetwRout.TCPRequest(
 			HandleLogin, 
 			new string[] {"req", "userName", "pwd"},
 			new string[] {"loginUser", name, pwd});
@@ -33,8 +33,8 @@ public class LogInUser : MonoBehaviour {
 				logInCanvas.SetActive(false);
 				mainMenuCanvas.SetActive(true);
 
-				Constants.UserHandler.ThisUser.Id = IdTmp;
-				Constants.UserHandler.ThisUser.ObjectName = inputName.GetComponent<InputField>().text;
+				Constants.SoftwareModel.UserHandler.ThisUser.Id = IdTmp;
+				Constants.SoftwareModel.UserHandler.ThisUser.ObjectName = inputName.GetComponent<InputField>().text;
 
                 return;
             }
