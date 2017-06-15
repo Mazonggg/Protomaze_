@@ -16,7 +16,7 @@ public class MainMenu : MonoBehaviour {
 	public void LogoutUser() {
 		
 		string userId = Constants.SoftwareModel.UserHandler.ThisUser.Id.ToString();
-        Debug.Log("LogoutUser: " + userId);
+        //Debug.Log("LogoutUser: " + userId);
 
 		Constants.SoftwareModel.NetwRout.TCPRequest(
             HandleLogout, 
@@ -32,13 +32,14 @@ public class MainMenu : MonoBehaviour {
 
 		Constants.SoftwareModel.UserHandler.ThisUser.Id = -1;
 		Constants.SoftwareModel.UserHandler.ThisUser.ObjectName = "default";
+		Constants.SoftwareModel.SocketObj.Active = false;
 	}
 
 	public void StartSession() {
 
 		Constants.SoftwareModel.UserHandler.ThisUser.Restart ();
 		int IdTmp = Constants.SoftwareModel.UserHandler.ThisUser.Id;
-        Debug.Log("IdTmp in StartSession: " + IdTmp);
+        //Debug.Log("IdTmp in StartSession: " + IdTmp);
         string userId = IdTmp.ToString();
 
 		Constants.SoftwareModel.NetwRout.TCPRequest(

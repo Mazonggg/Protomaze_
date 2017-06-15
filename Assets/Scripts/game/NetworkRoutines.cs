@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.Networking;
 
+using System.Net;
 using System;
 
 /// Contains function Md5Sum() from 'http://wiki.unity3d.com/index.php?title=MD5 opened on: 2017_04_26'.
@@ -18,14 +19,36 @@ public class NetworkRoutines : MonoBehaviour {
 	private static string serverHint = "Hint:";
 	private static string serverRequest = "http://h2678361.stratoserver.net/scripts/";
 	private static string connScript = "connection.php";
-	private static string socketScript = "socket.php";
+	private static string upstreamSocket = "upstream.php";
+	private static string downstreamSocket = "downstream.php";
 
 	private UnityWebRequest connection;
 
 	public void CheckSocket() {
-		
-		string request = SerializeRequest (serverRequest + socketScript, GenerateParams(new string[] {}, new string[] {}));
+
+		string request = SerializeRequest (serverRequest + upstreamSocket, GenerateParams(new string[] {}, new string[] {}));
 		StartCoroutine (MakeRequest(LogCheckSocket, request));
+		request = SerializeRequest (serverRequest + downstreamSocket, GenerateParams(new string[] {"user_id", "reference"}, new string[] {Constants.SoftwareModel.UserHandler.ThisUser.Id.ToString(), GetLocalIPv4().ToString()}));
+		StartCoroutine (MakeRequest(LogCheckSocket, request));
+	}
+
+
+	/// <summary>
+	/// Searches for own IP-Addres in DNS host entries.
+	/// Picks last entry found, while in development.
+	/// </summary>
+	/// <returns>The local I pv4.</returns>
+	internal static string GetLocalIPv4() {
+
+		IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
+		IPAddress[] ipAddr = ipHost.AddressList;
+
+		string ip = "";
+		for(int i = 0; i < ipAddr.Length; i++) {
+			ip = ipAddr[i].ToString();
+		}
+
+		return ip;
 	}
 
 	private void LogCheckSocket(string[][] response){}
@@ -42,21 +65,21 @@ public class NetworkRoutines : MonoBehaviour {
 	/// <param name="param">Parameter.</param>
 	private IEnumerator MakeRequest(Action<string[][]> callback, string request) {
 		
-		Debug.Log ("MakeRequest: " + request);
+		//Debug.Log ("MakeRequest: " + request);
 		using (connection = UnityWebRequest.Get (request)) {
 
 			yield return connection.Send ();
 
 			if (connection.isError) {
-				Debug.Log(serverError + connection.error);
+				//Debug.Log(serverError + connection.error);
 			}
 			else {
 				string response = connection.downloadHandler.text;
 				// Checks if the request responses with an error
 				if (response.StartsWith (serverError)) {
-					Debug.Log (serverError + response);
+					//Debug.Log (serverError + response);
 				} else {
-					Debug.Log (serverResponse + response);
+					//Debug.Log (serverResponse + response);
                     callback (CompileResponse(response));
 				}
 			}
@@ -120,7 +143,7 @@ public class NetworkRoutines : MonoBehaviour {
 	/// </summary>
 	/// <returns>The sum.</returns>
 	/// <param name="strToEncrypt">String to encrypt.</param>
-	public string Md5Sum(string strToEncrypt){
+	public string Md5Sum(string strToEncrypt) {
 		System.Text.UTF8Encoding ue = new System.Text.UTF8Encoding();
 		byte[] bytes = ue.GetBytes(strToEncrypt);
 
@@ -131,8 +154,7 @@ public class NetworkRoutines : MonoBehaviour {
 		// Convert the encrypted bytes back to a string (base 16)
 		string hashString = "";
 
-		for (int i = 0; i < hashBytes.Length; i++)
-		{
+		for (int i = 0; i < hashBytes.Length; i++) {
 			hashString += System.Convert.ToString(hashBytes[i], 16).PadLeft(2, '0');
 		}
 

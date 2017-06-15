@@ -16,7 +16,7 @@ public class GObject : MonoBehaviour {
 	public int Id
 	{
 		get { return id; }
-		set { id = value; Debug.Log("Id=" + value); }
+		set { id = value; }
 	}
 	/// <summary>
 	/// Real name of the object.
@@ -24,7 +24,7 @@ public class GObject : MonoBehaviour {
 	private string objectName = "default";
 	public string ObjectName{
 		get { return objectName; }
-        set { objectName = value; Debug.Log("ObjectName=" + value); }
+        set { objectName = value; }
 	}
 	/// <summary>
 	/// Tells, if the object currently moves or is moved by a user.
@@ -40,7 +40,7 @@ public class GObject : MonoBehaviour {
     private int ssId = -1;
     public int SsId {
         get { return ssId; }
-        set { ssId = value; Debug.Log("ssId=" + ssId); }
+        set { ssId = value; }
     }
 	/// <summary>
 	/// true, if changed since last time data where referenced.
