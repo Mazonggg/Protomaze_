@@ -80,7 +80,7 @@ public class SocketObject {
 	/// Prepares the downstream socket.
 	/// </summary>
 	/// <returns><c>true</c>, if socket down was prepared, <c>false</c> otherwise.</returns>
-	private void PrepareSocketDown () {
+	private void PrepareSocketDown() {
 
 		socketDown.Bind (endPointDown);
 	}
@@ -95,7 +95,7 @@ public class SocketObject {
 
 		Debug.Log ("ListenToSocket()");
 		while (active) {
-			if (socketUp.Receive (sendBufDown) > 0) {
+			if (socketDown.Receive (sendBufDown) > 0) {         //CS: Change socketUp to socketDown
 				ProcessDownBuf (sendBufDown);
 				yield return new WaitForSeconds(0.1f);
 			}

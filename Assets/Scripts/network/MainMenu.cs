@@ -7,7 +7,7 @@ using System;
 
 public class MainMenu : MonoBehaviour {
 
-	public GameObject logInCanvas, mainMenuCanvas, startSessionButton;
+	public GameObject logInCanvas, mainMenuCanvas, startSessionButton, JoinSessionCanvas, CreateSessionCanvas;
 
 	void Start(){
 		mainMenuCanvas.SetActive (false);
@@ -63,9 +63,21 @@ public class MainMenu : MonoBehaviour {
 		Constants.SoftwareModel.SocketObj.WorkOnSocket();
     }
 
-	private void RequestLogout(string userId) {
+	/*private void RequestLogout(string userId) {           // gebrauchen wir nicht
 
 		mainMenuCanvas.SetActive (false);
 		logInCanvas.SetActive (true);
-	}
+	}*/                                                 
+
+    public void JoinSession()
+    {
+        mainMenuCanvas.SetActive(false);
+        JoinSessionCanvas.SetActive(true);
+    }
+
+    public void CreateSession()
+    {
+        mainMenuCanvas.SetActive(false);
+        CreateSessionCanvas.SetActive(true);
+    }
 }
