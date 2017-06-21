@@ -14,9 +14,9 @@ public class JoinSessionButtonPrefab : MonoBehaviour {
 
 	}
 
-    public void setUp (Text sessionID, Text leader) {
-        sessionIDText = sessionID;
-        leaderText = leader;
+    public void setUp (string sessionID, string leader) {
+        sessionIDText.text = sessionID;
+        leaderText.text = leader;
     }
 	
 

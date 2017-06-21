@@ -7,7 +7,8 @@ using System;
 
 public class MainMenu : MonoBehaviour {
 
-	public GameObject logInCanvas, mainMenuCanvas, startSessionButton, JoinSessionCanvas, CreateSessionCanvas;
+	public GameObject logInCanvas, mainMenuCanvas, startSessionButton, joinSessionCanvas, createSessionCanvas;
+    public GameObject joinSessionController;
 
 	void Start(){
 		mainMenuCanvas.SetActive (false);
@@ -72,12 +73,15 @@ public class MainMenu : MonoBehaviour {
     public void JoinSession()
     {
         mainMenuCanvas.SetActive(false);
-        JoinSessionCanvas.SetActive(true);
+        joinSessionCanvas.SetActive(true);
+        joinSessionController.GetComponent<JoinSession>().getSessions();        //Das die referenzierung bei MonoBehaviour so doof ist ...
+        //  JoinSession js = new global::JoinSession();
+        //  js.getSessions();
     }
 
     public void CreateSession()
     {
         mainMenuCanvas.SetActive(false);
-        CreateSessionCanvas.SetActive(true);
+        createSessionCanvas.SetActive(true);
     }
 }

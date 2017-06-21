@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text.RegularExpressions;
+
 
 public class JoinSession : MonoBehaviour {
 
@@ -8,10 +10,14 @@ public class JoinSession : MonoBehaviour {
     public GameObject JoinButton;
     public GameObject content;
 
+
     void Start () {
+
         JoinSessionCanvas.SetActive(false);
-        AddButtons();
+
     }
+
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -19,20 +25,55 @@ public class JoinSession : MonoBehaviour {
 	}
 
     public void goBack() {
+
         mainMenuCanvas.SetActive(true);
         JoinSessionCanvas.SetActive(false);
     }
 
 
-    private void AddButtons() {
+    private void addButtons(string[][] sessionList) {
+
         int count = 0;
-        for (int i = 0; i < 20; i++) {
-            GameObject newButton = (GameObject)Instantiate(JoinButton); 
+        for (int i = 0; i < sessionList.Length; i++) {
+            GameObject newButton = (GameObject)Instantiate(JoinButton);
+            newButton.GetComponent<JoinSessionButtonPrefab>().setUp(sessionList[i][0], sessionList[i][1]);
             newButton.transform.SetParent(content.transform);
             count = i;
         }
-        RectTransform newRT = content.GetComponent<RectTransform>();
-        newRT.sizeDelta = new Vector2(0, count * 100);
+        RectTransform newRT = content.GetComponent<RectTransform>();        //to get the RectTransform from content
+        newRT.sizeDelta = new Vector2(0, count * 100);                      //and strech it to fit all Buttons
+    }
+
+    public void getSessions() {
+
+        Constants.SoftwareModel.NetwRout.TCPRequest(
+            listAllSessions,
+            new string[] { "req" },
+            new string[] { "getSessions"});
+    }
+
+    private void listAllSessions(string[][] response) {
+
+             string ret = "";
+
+          foreach (string[] pair in response) {
+              if (pair[0].Equals("sessions")) {
+                ret += pair[1];
+              }
+          }
+        string pattern = @"//|--";
+        string[] sessionsAndLeader = Regex.Split(ret.TrimEnd('-'), pattern);
+        int i = 0;
+        string [][] sessionList = new string[sessionsAndLeader.Length/2][];
+
+        foreach (string element in sessionsAndLeader) {
+            sessionList[i][i%2] = element;
+            i++;
+           // Debug.Log(element);
+         }
+       //addButtons(sessionList);
+
+       // Debug.Log(ret);
     }
 
 }
