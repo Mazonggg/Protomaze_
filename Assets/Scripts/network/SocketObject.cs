@@ -16,8 +16,7 @@ public class SocketObject {
 	private static string serverError = "Error";
 
 	private Thread socketThread;
-	private Socket socketUp;
-	private Socket socketDown;
+	private Socket socket;
 
 
     private int test = 0;
@@ -27,18 +26,15 @@ public class SocketObject {
 		set { active = value; }
 	}
 
-	private static int portUp = 8050;
-	private static int portDown = 8051;
+	private static int port = 8050;
 	private static IPAddress IPv4 = IPAddress.Parse("81.169.245.94");
 
-	private IPEndPoint endPointUp = new IPEndPoint(IPv4, portUp);
-	private IPEndPoint endPointDown = new IPEndPoint(IPAddress.Any, portDown);
+	private IPEndPoint endPoint = new IPEndPoint(IPv4, port);
 
 	public SocketObject(){
 
 		// Create the socket, that communicates with server.
-		socketUp = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-		socketDown = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
     }
 
 	/// <summary>
@@ -50,54 +46,46 @@ public class SocketObject {
 		active = true;
 		Constants.SoftwareModel.NetwRout.CheckSocket ();
 		Constants.SoftwareModel.StartCoroutine (TellSocket());
-
-		PrepareSocketDown ();
-		Debug.Log ("bis hier kommt er");
-		// TODO Constants.SoftwareModel.StartCoroutine (ListenToSocket());
-		Debug.Log ("und geht hier weiter");
+		Constants.SoftwareModel.StartCoroutine (ListenToSocket());
     }
 
 	// storage for upstream data.
-	byte[] sendBufUp = new byte[]{0};
-	int sendBytesUp = 0;
+	byte[] sendBuf = new byte[]{0};
+	int sendBytes = 0;
 	/// <summary>
 	/// Tells change in state of CObjects to server.
 	/// </summary>
 	/// <returns>The socket.</returns>
 	private IEnumerator TellSocket(){
-
+		
 		while (active) {
 			// Transmitted data
 			if (Constants.SoftwareModel.UserHandler.ThisUser.Updated) {
-				sendBufUp = System.Text.ASCIIEncoding.ASCII.GetBytes (CollectUserData ());
-				sendBytesUp = socketUp.SendTo (sendBufUp, endPointUp);
+				sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (CollectUserData ());
+				sendBytes = socket.SendTo (sendBuf, endPoint);
 			} 
 			yield return new WaitForSeconds(0.1f);
 		}
+		Debug.Log ("Hier kann der beim testen eigentlich garnicht hinkommen :-D *Derp*");
 	}
 
-	/// <summary>
-	/// Prepares the downstream socket.
-	/// </summary>
-	/// <returns><c>true</c>, if socket down was prepared, <c>false</c> otherwise.</returns>
-	private void PrepareSocketDown() {
-
-		socketDown.Bind (endPointDown);
-	}
 
 	// storage for upstream data.
-	byte[] sendBufDown = new byte[]{0};
+	byte[] receiveBuf = new byte[128];
 	/// <summary>
 	/// Listens to downstream socket, connected to server, and updates state of CObjects accordingly.
 	/// </summary>
 	/// <returns>The to socket.</returns>
 	private IEnumerator ListenToSocket (){
-
-		Debug.Log ("ListenToSocket()");
+		
 		while (active) {
-			if (socketDown.Receive (sendBufDown) > 0) {         //CS: Change socketUp to socketDown
-				ProcessDownBuf (sendBufDown);
-				yield return new WaitForSeconds(0.1f);
+			yield return null;
+			if (socket.Poll(0, SelectMode.SelectRead)) {
+				int bytesReceived = socket.Receive(receiveBuf, 0, receiveBuf.Length, SocketFlags.None);
+
+				if (bytesReceived > 0) {
+					ProcessDownBuf (receiveBuf);
+				}
 			}
 		}
 	}
@@ -108,8 +96,12 @@ public class SocketObject {
 	/// </summary>
 	/// <param name="buf">Buffer.</param>
 	private void ProcessDownBuf(byte[] buf) {
-
+		
 		string bufString = System.Text.ASCIIEncoding.ASCII.GetString (buf);
+		/*bufString
+		foreach (byte beit in buf) {
+			bufString
+		}*/
 		Debug.Log ("ProcessDownBuf: " + bufString);
 	}
 

@@ -54,26 +54,26 @@ public class JoinSession : MonoBehaviour {
 
     private void listAllSessions(string[][] response) {
 
-             string ret = "";
+        string ret = "";
 
-          foreach (string[] pair in response) {
-              if (pair[0].Equals("sessions")) {
-                ret += pair[1];
-              }
-          }
+        foreach (string[] pair in response) {
+          	if (pair[0].Equals("sessions")) {
+             	ret += pair[1];
+           	}
+        }
         string pattern = @"//|--";
         string[] sessionsAndLeader = Regex.Split(ret.TrimEnd('-'), pattern);
         int i = 0;
-        string [][] sessionList = new string[sessionsAndLeader.Length/2][];
+        string[][] sessionList = new string[sessionsAndLeader.Length/2][];
+		for (int j = 0; j < sessionList.Length; j++) {
+			sessionList[j] = new string[2];
+		}
 
         foreach (string element in sessionsAndLeader) {
-            sessionList[i][i%2] = element;
+            sessionList[i/2][i%2] = element;
             i++;
-           // Debug.Log(element);
          }
-       //addButtons(sessionList);
-
-       // Debug.Log(ret);
+       addButtons(sessionList);
     }
 
 }

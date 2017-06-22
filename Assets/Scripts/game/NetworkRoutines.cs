@@ -20,15 +20,15 @@ public class NetworkRoutines : MonoBehaviour {
 	private static string serverRequest = "http://h2678361.stratoserver.net/scripts/";
 	private static string connScript = "connection.php";
 	private static string upstreamSocket = "upstream.php";
-	private static string downstreamSocket = "downstream.php";
 
 	private UnityWebRequest connection;
 
+	// TODO das sollte nicht hier liegen.
 	public void CheckSocket() {
 
-		string request = SerializeRequest (serverRequest + upstreamSocket, GenerateParams(new string[] {}, new string[] {}));
-		StartCoroutine (MakeRequest(LogCheckSocket, request));
-		request = SerializeRequest (serverRequest + downstreamSocket, GenerateParams(new string[] {"user_id", "reference"}, new string[] {Constants.SoftwareModel.UserHandler.ThisUser.Id.ToString(), GetLocalIPv4().ToString()}));
+		string request = SerializeRequest (serverRequest + upstreamSocket, GenerateParams(
+			new string[] {"user_id"}, 
+			new string[] {Constants.SoftwareModel.UserHandler.ThisUser.Id.ToString()}));
 		StartCoroutine (MakeRequest(LogCheckSocket, request));
 	}
 

@@ -24,7 +24,6 @@ public class User : GObject {
 	public UpdateData UpdateData {
 		get { 
 			Updated = false;
-			Debug.Log ("UpdateData: id = " + Id);
 			if (objectHeld == null) {
 				return new UpdateData (
 					Id, 
