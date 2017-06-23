@@ -68,6 +68,8 @@ public class GObject : MonoBehaviour {
 	/// Resets all parameter of this GObject.
 	/// </summary>
 	public void Restart() {
+		transform.position = new Vector3 (0, 0, 0);
+		//transform.rotation = new Vector3 (0, 0, 0);
 		updated = true;
 	}
 
@@ -80,7 +82,6 @@ public class GObject : MonoBehaviour {
 	 * Moves GObject according to given direction and pace parameters.
 	 */
 	protected void Move(Vector3 dir, float pace){
-		
 		transform.position += dir * pace * Time.deltaTime;
 		updated = true;
 	}

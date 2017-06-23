@@ -66,7 +66,7 @@ public class SocketObject {
 			} 
 			yield return new WaitForSeconds(0.1f);
 		}
-		Debug.Log ("Hier kann der beim testen eigentlich garnicht hinkommen :-D *Derp*");
+		Debug.Log ("Ende TellSocket()");
 	}
 
 
