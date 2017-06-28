@@ -46,7 +46,7 @@ public class SocketObject {
 		active = true;
 		Constants.SoftwareModel.NetwRout.CheckSocket ();
 		Constants.SoftwareModel.StartCoroutine (TellSocket());
-		//Constants.SoftwareModel.StartCoroutine (ListenToSocket());
+		Constants.SoftwareModel.StartCoroutine (ListenToSocket());
     }
 
 	// storage for upstream data.
@@ -66,16 +66,16 @@ public class SocketObject {
 			if (Constants.SoftwareModel.UserHandler.ThisUser.Updated) {
 				SendDatagram ();
 			} 
-			yield return new WaitForSeconds(0.1f);
+			yield return new WaitForSeconds(0.01f);
 		}
-		Debug.Log ("Ende TellSocket()");
+		//Debug.Log ("Ende TellSocket()");
 	}
 
 	private int counting = 0;
 	private void SendDatagram() {
 
-		sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes ("HALLO " + counting++);
-		//sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (CollectUserData ());
+		//sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes ("HALLO " + counting++);
+		sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (CollectUserData ());
 		sendBytes = socket.SendTo (sendBuf, endPoint);
 	}
 
@@ -87,7 +87,9 @@ public class SocketObject {
 	/// </summary>
 	/// <returns>The to socket.</returns>
 	private IEnumerator ListenToSocket (){
-		
+
+		yield return new WaitForSeconds(1f);
+
 		while (active) {
 			yield return null;
 			if (socket.Poll(0, SelectMode.SelectRead)) {
@@ -97,8 +99,19 @@ public class SocketObject {
 					ProcessDownBuf (receiveBuf);
 				}
 			}
-		}
+		}		
+		Debug.Log ("ListenToSocket: " + loggg[0]);
+		Debug.Log ("ListenToSocket: " + loggg[1]);
+		Debug.Log ("ListenToSocket: " + loggg[2]);
+		Debug.Log ("ListenToSocket: " + loggg[3]);
+
+		loggg [0] = "";
+		loggg [1] = "";
+		loggg [2] = "";
+		loggg [3] = "";
 	}
+
+	private string[] loggg = {"", "", "", ""};
 
 	/// <summary>
 	/// Processes the content of the buf, received from server.
@@ -108,11 +121,14 @@ public class SocketObject {
 	private void ProcessDownBuf(byte[] buf) {
 		
 		string bufString = System.Text.ASCIIEncoding.ASCII.GetString (buf);
-		/*bufString
-		foreach (byte beit in buf) {
-			bufString
-		}*/
-		Debug.Log ("ProcessDownBuf: " + bufString);
+
+		if (loggg[0].Equals("")) {
+			loggg [0] = bufString;
+			loggg [1] = "OWN TIME: " + DateTime.Now.ToString ("HH:mm:ss.fff", System.Globalization.DateTimeFormatInfo.InvariantInfo);
+		} else {
+			loggg [2] = bufString;
+			loggg [3] = "OWN TIME: " + DateTime.Now.ToString ("HH:mm:ss.fff", System.Globalization.DateTimeFormatInfo.InvariantInfo);
+		}
 	}
 
 	int counter = 0;

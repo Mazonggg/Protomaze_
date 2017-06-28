@@ -24,7 +24,7 @@ public class NetworkRoutines : MonoBehaviour {
 
 	// TODO das sollte nicht hier liegen.
 	public void CheckSocket() {
-
+		
 		string request = SerializeRequest (serverRequest + upstreamSocket, GenerateParams(
 			new string[] {"user_id"}, 
 			new string[] {Constants.SoftwareModel.UserHandler.ThisUser.Id.ToString()}));
@@ -78,7 +78,7 @@ public class NetworkRoutines : MonoBehaviour {
 				if (response.StartsWith (serverError)) {
 					//Debug.Log (serverError + response);
 				} else {
-					Debug.Log (serverResponse + response);
+					//Debug.Log (serverResponse + response);
                     callback (CompileResponse(response));
 				}
 			}
