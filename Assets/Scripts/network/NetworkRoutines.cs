@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-using UnityEngine;
 using UnityEngine.Networking;
 
 using System.Net;
@@ -20,6 +18,7 @@ public class NetworkRoutines : MonoBehaviour {
 	private static string serverRequest = "http://h2678361.stratoserver.net/scripts/";
 	private static string connScript = "connection.php";
 	private static string upstreamSocket = "upstream.php";
+	//private static string upstreamSocket = "upstream_sich_170622.php";
 
 	private UnityWebRequest connection;
 

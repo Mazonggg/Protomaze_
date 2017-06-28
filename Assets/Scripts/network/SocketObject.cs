@@ -46,27 +46,37 @@ public class SocketObject {
 		active = true;
 		Constants.SoftwareModel.NetwRout.CheckSocket ();
 		Constants.SoftwareModel.StartCoroutine (TellSocket());
-		Constants.SoftwareModel.StartCoroutine (ListenToSocket());
+		//Constants.SoftwareModel.StartCoroutine (ListenToSocket());
     }
 
 	// storage for upstream data.
-	byte[] sendBuf = new byte[]{0};
+	byte[] sendBuf = new byte[128];
 	int sendBytes = 0;
 	/// <summary>
 	/// Tells change in state of CObjects to server.
 	/// </summary>
 	/// <returns>The socket.</returns>
 	private IEnumerator TellSocket(){
-		
+
+		yield return new WaitForSeconds(1f);
+
+		SendDatagram();
 		while (active) {
 			// Transmitted data
 			if (Constants.SoftwareModel.UserHandler.ThisUser.Updated) {
-				sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (CollectUserData ());
-				sendBytes = socket.SendTo (sendBuf, endPoint);
+				SendDatagram ();
 			} 
 			yield return new WaitForSeconds(0.1f);
 		}
 		Debug.Log ("Ende TellSocket()");
+	}
+
+	private int counting = 0;
+	private void SendDatagram() {
+
+		sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes ("HALLO " + counting++);
+		//sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (CollectUserData ());
+		sendBytes = socket.SendTo (sendBuf, endPoint);
 	}
 
 

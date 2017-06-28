@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-using UnityEngine;
 using UnityEngine.Networking;
 
 public class LogInUser : MonoBehaviour {
