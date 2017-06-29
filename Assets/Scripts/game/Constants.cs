@@ -9,6 +9,5 @@ public sealed class Constants {
 
 	// Movement speed of Users.
 	public static float moveSpeed = 10f;
-
-	public static SoftwareModel SoftwareModel;
+	public static string softwareModel = "SoftwareModel";
 }

@@ -27,7 +27,7 @@ public class NetworkRoutines : MonoBehaviour {
 		
 		string request = SerializeRequest (serverRequest + upstreamSocket, GenerateParams(
 			new string[] {"user_id"}, 
-			new string[] {Constants.SoftwareModel.UserHandler.ThisUser.Id.ToString()}));
+			new string[] {GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id.ToString()}));
 		StartCoroutine (MakeRequest(LogCheckSocket, request));
 	}
 
@@ -66,7 +66,7 @@ public class NetworkRoutines : MonoBehaviour {
 		
 		//Debug.Log ("MakeRequest: " + request);
 		using (connection = UnityWebRequest.Get (request)) {
-
+			
 			yield return connection.Send ();
 
 			if (connection.isError) {

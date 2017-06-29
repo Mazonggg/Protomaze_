@@ -46,7 +46,7 @@ public class JoinSession : MonoBehaviour {
 
     public void getSessions() {
 
-        Constants.SoftwareModel.NetwRout.TCPRequest(
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.TCPRequest(
             listAllSessions,
             new string[] { "req" },
             new string[] { "getSessions"});

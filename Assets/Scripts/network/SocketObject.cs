@@ -20,11 +20,11 @@ public class SocketObject {
 
 
     private int test = 0;
-    private bool active = true;
+   /* private bool active = true;
 	public bool Active {
 		get { return active; }
 		set { active = value; }
-	}
+	}*/
 
 	private static int port = 8050;
 	private static IPAddress IPv4 = IPAddress.Parse("81.169.245.94");
@@ -35,23 +35,27 @@ public class SocketObject {
 
 		// Create the socket, that communicates with server.
 		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+		WorkOnSocket ();
     }
 
 	/// <summary>
 	/// Starts to work on socket.
 	/// Connection issues can be caught here.
 	/// </summary>
-	public void WorkOnSocket(){
+	private void WorkOnSocket(){
 
-		active = true;
-		Constants.SoftwareModel.NetwRout.CheckSocket ();
-		Constants.SoftwareModel.StartCoroutine (TellSocket());
-		Constants.SoftwareModel.StartCoroutine (ListenToSocket());
+		//active = true;
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.CheckSocket ();
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().StartCoroutine (TellSocket());
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().StartCoroutine (ListenToSocket());
     }
 
 	// storage for upstream data.
 	byte[] sendBuf = new byte[128];
 	int sendBytes = 0;
+	float lastDatagram = 0;
+	float currentTime = 1;
+	int countTicks = 0;
 	/// <summary>
 	/// Tells change in state of CObjects to server.
 	/// </summary>
@@ -61,12 +65,15 @@ public class SocketObject {
 		yield return new WaitForSeconds(1f);
 
 		SendDatagram();
-		while (active) {
+		while (true) {
 			// Transmitted data
-			if (Constants.SoftwareModel.UserHandler.ThisUser.Updated) {
+			currentTime = Time.realtimeSinceStartup;
+			// Only tick, if changes in game state is found and time since last tick fits tickrate.
+			if (GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Updated && (currentTime - lastDatagram > 0.04)) {
 				SendDatagram ();
-			} 
-			yield return new WaitForSeconds(0.01f);
+				lastDatagram = currentTime;
+			}
+			yield return null;
 		}
 		//Debug.Log ("Ende TellSocket()");
 	}
@@ -90,7 +97,7 @@ public class SocketObject {
 
 		yield return new WaitForSeconds(1f);
 
-		while (active) {
+		while (true) {
 			yield return null;
 			if (socket.Poll(0, SelectMode.SelectRead)) {
 				int bytesReceived = socket.Receive(receiveBuf, 0, receiveBuf.Length, SocketFlags.None);
@@ -100,7 +107,7 @@ public class SocketObject {
 				}
 			}
 		}		
-		Debug.Log ("ListenToSocket: " + loggg[0]);
+		/*Debug.Log ("ListenToSocket: " + loggg[0]);
 		Debug.Log ("ListenToSocket: " + loggg[1]);
 		Debug.Log ("ListenToSocket: " + loggg[2]);
 		Debug.Log ("ListenToSocket: " + loggg[3]);
@@ -108,7 +115,7 @@ public class SocketObject {
 		loggg [0] = "";
 		loggg [1] = "";
 		loggg [2] = "";
-		loggg [3] = "";
+		loggg [3] = "";*/
 	}
 
 	private string[] loggg = {"", "", "", ""};
@@ -121,14 +128,14 @@ public class SocketObject {
 	private void ProcessDownBuf(byte[] buf) {
 		
 		string bufString = System.Text.ASCIIEncoding.ASCII.GetString (buf);
-
-		if (loggg[0].Equals("")) {
+		Debug.Log ("ProcessDownBuf: " + bufString);
+		/*if (loggg[0].Equals("")) {
 			loggg [0] = bufString;
 			loggg [1] = "OWN TIME: " + DateTime.Now.ToString ("HH:mm:ss.fff", System.Globalization.DateTimeFormatInfo.InvariantInfo);
 		} else {
 			loggg [2] = bufString;
 			loggg [3] = "OWN TIME: " + DateTime.Now.ToString ("HH:mm:ss.fff", System.Globalization.DateTimeFormatInfo.InvariantInfo);
-		}
+		}*/
 	}
 
 	int counter = 0;
@@ -138,8 +145,8 @@ public class SocketObject {
 	/// <returns>The user data.</returns>
 	private string CollectUserData() {
 
-		if (Constants.SoftwareModel.UserHandler.ThisUser.Updated) {
-			UpdateData userData = Constants.SoftwareModel.UserHandler.ThisUser.UpdateData;
+		if (GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Updated) {
+			UpdateData userData = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.UpdateData;
 
 			string msg = "t=";
 			if (userData.ObjectHeld == null) {

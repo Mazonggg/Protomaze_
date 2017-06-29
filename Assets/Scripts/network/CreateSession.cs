@@ -38,9 +38,9 @@ public class CreateSession : MonoBehaviour {
 			}
 			if(pair[0].Equals("sessionId")) {
 				int.TryParse(pair[1], out SsIdTmp);
-				Constants.SoftwareModel.UserHandler.ThisUser.SsId = SsIdTmp;
-				Constants.SoftwareModel.SocketObj.WorkOnSocket();
-				//Debug.Log ("ssId=" + Constants.SoftwareModel.UserHandler.ThisUser.SsId + " tmp=" + SsIdTmp);
+				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
+				// Constants.SoftwareModel.SocketObj.WorkOnSocket();
+				// Debug.Log ("ssId=" + Constants.SoftwareModel.UserHandler.ThisUser.SsId + " tmp=" + SsIdTmp);
 
 				mainMenuCanvas.SetActive(false);
 				createSessionCanvas.SetActive(true);

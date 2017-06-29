@@ -30,8 +30,15 @@ public class SoftwareModel : MonoBehaviour {
 		
 		gameObject.AddComponent<User> ();
 		userHandler = new UserHandler (gameObject.GetComponent<User>());
-		socketObj = new SocketObject ();
+		//socketObj = new SocketObject ();
 		netwRout = gameObject.GetComponent<NetworkRoutines> ();
-		Constants.SoftwareModel = this;
+	}
+
+	public void CreateSocketObject(){
+		socketObj = new SocketObject ();
+	}
+
+	public void DestroySocketObject() {
+		socketObj = null;
 	}
 }
