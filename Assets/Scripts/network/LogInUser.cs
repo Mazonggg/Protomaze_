@@ -12,7 +12,8 @@ public class LogInUser : MonoBehaviour {
 	public void LoginUser() {
 
 		string name = inputName.GetComponent<InputField>().text;
-		string pwd = Constants.SoftwareModel.NetwRout.Md5Sum(inputPwd.GetComponent<InputField>().text);
+		string inPwd = inputPwd.GetComponent<InputField> ().text;
+		string pwd = Constants.SoftwareModel.NetwRout.Md5Sum(inPwd);
 
 		Constants.SoftwareModel.NetwRout.TCPRequest(
 			HandleLogin, 
