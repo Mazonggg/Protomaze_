@@ -23,8 +23,8 @@ public class GObject : MonoBehaviour {
 	/// </summary>
 	private string objectName = "default";
 	public string ObjectName{
-		get { return objectName; }
-        set { objectName = value; }
+		get { return Constants.userNames[0]; }
+		set { Constants.userNames[0] = value; }
 	}
 	/// <summary>
 	/// Tells, if the object currently moves or is moved by a user.
@@ -39,8 +39,8 @@ public class GObject : MonoBehaviour {
 	/// </summary>
     private int ssId = -1;
     public int SsId {
-        get { return ssId; }
-        set { ssId = value; }
+		get { return Constants.sessionId; }
+		set { Constants.sessionId = value; }
     }
 	/// <summary>
 	/// true, if changed since last time data where referenced.
@@ -69,8 +69,25 @@ public class GObject : MonoBehaviour {
 	/// </summary>
 	public void Restart() {
 		transform.position = new Vector3 (0, 0, 0);
-		//transform.rotation = new Vector3 (0, 0, 0);
+		/*transform.rotation.x = 0;
+		transform.rotation.y = 0;
+		transform.rotation.z = 0;*/
 		updated = true;
+	}
+
+	/// <summary>
+	/// Place the specified pos and rot.
+	/// </summary>
+	/// <param name="pos">Position.</param>
+	/// <param name="rot">Rot.</param>
+	public void Place(Vector3 pos, Vector3 rot, bool visible) {
+
+		transform.position = pos;
+		/*transform.rotation.x = rot.x;
+		transform.rotation.y = rot.y;
+		transform.rotation.z = rot.z;*/
+
+		GetComponent<MeshRenderer> ().enabled = visible;
 	}
 
 	// Use this for initialization

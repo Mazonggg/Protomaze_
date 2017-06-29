@@ -25,20 +25,28 @@ public class SoftwareModel : MonoBehaviour {
 		set { netwRout = value; }
 	}
 
+	private int i = 0;
     // Use this for initialization
     void Start () {
 		
-		gameObject.AddComponent<User> ();
-		userHandler = new UserHandler (gameObject.GetComponent<User>());
+		//gameObject.AddComponent<User> ();
+		userHandler = new UserHandler (GameObject.Find("User").GetComponent<User>());
 		//socketObj = new SocketObject ();
 		netwRout = gameObject.GetComponent<NetworkRoutines> ();
 	}
 
+	public void PlaceUser() {
+
+		userHandler.ThisUser.Place (new Vector3 (0, 0, 0), new Vector3(0, 0, 0), true);
+	}
+
 	public void CreateSocketObject(){
+		
 		socketObj = new SocketObject ();
 	}
 
 	public void DestroySocketObject() {
+
 		socketObj = null;
 	}
 }

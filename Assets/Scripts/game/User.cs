@@ -17,6 +17,12 @@ public class User : GObject {
 		get { return objectHeld; }
 		set { objectHeld = value; }
 	}
+
+	private int id = -1;
+	public int Id {
+		get { return Constants.userIds [0]; }
+		set { id = value; Constants.userIds [0] = value; }
+	}
 	/// <summary>
 	/// Returns the relevant data for updating the server, for this object.
 	/// </summary>
@@ -45,5 +51,10 @@ public class User : GObject {
 			Vector3 dir = new Vector3 (Input.GetAxis ("Horizontal"), 0,Input.GetAxis ("Vertical"));
 			Move (dir, Constants.moveSpeed);
 		}
+	}
+
+	public string GetUserInfo() {
+		string ret = "id=" + Constants.userIds [0];
+		return ret + " " + ObjectName;
 	}
 }

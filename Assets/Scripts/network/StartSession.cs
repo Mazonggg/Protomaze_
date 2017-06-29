@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StartSession : MonoBehaviour {
 
@@ -22,6 +23,6 @@ public class StartSession : MonoBehaviour {
 	/// </summary>
 	public void StartTheSession(){
 
-		GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().CreateSocketObject ();
+		SceneManager.LoadScene ("Level_1");
 	}
 }

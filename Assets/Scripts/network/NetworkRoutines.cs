@@ -22,15 +22,6 @@ public class NetworkRoutines : MonoBehaviour {
 
 	private UnityWebRequest connection;
 
-	// TODO das sollte nicht hier liegen.
-	public void CheckSocket() {
-		
-		string request = SerializeRequest (serverRequest + upstreamSocket, GenerateParams(
-			new string[] {"user_id"}, 
-			new string[] {GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id.ToString()}));
-		StartCoroutine (MakeRequest(LogCheckSocket, request));
-	}
-
 
 	/// <summary>
 	/// Searches for own IP-Addres in DNS host entries.
@@ -50,7 +41,13 @@ public class NetworkRoutines : MonoBehaviour {
 		return ip;
 	}
 
-	private void LogCheckSocket(string[][] response){}
+	public static void EmptyCallback(string[][] response){}
+
+	public void UDPRequest(Action<string[][]> callback, string[] keys, string[] values) {
+
+		string request = SerializeRequest (serverRequest + upstreamSocket, GenerateParams(keys, values));
+		StartCoroutine (MakeRequest(callback, request));
+	}
 
 	public void TCPRequest(Action<string[][]> callback, string[] keys, string[] values) {
         

@@ -32,11 +32,21 @@ public class SocketObject {
 	private IPEndPoint endPoint = new IPEndPoint(IPv4, port);
 
 	public SocketObject(){
-
+		
 		// Create the socket, that communicates with server.
 		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+		SoftwareModel softMod = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ();
+		UserHandler usHand = softMod.UserHandler;
+		User us = usHand.ThisUser;
+		string userId = usHand.ThisUser.Id.ToString ();
+    
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.UDPRequest (
+			NetworkRoutines.EmptyCallback,
+			new string[] {"user_id"}, 
+			new string[] {userId});
 		WorkOnSocket ();
-    }
+	}
 
 	/// <summary>
 	/// Starts to work on socket.
@@ -45,7 +55,6 @@ public class SocketObject {
 	private void WorkOnSocket(){
 
 		//active = true;
-		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.CheckSocket ();
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().StartCoroutine (TellSocket());
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().StartCoroutine (ListenToSocket());
     }
