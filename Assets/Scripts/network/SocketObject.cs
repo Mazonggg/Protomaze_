@@ -40,12 +40,26 @@ public class SocketObject {
 		UserHandler usHand = softMod.UserHandler;
 		User us = usHand.ThisUser;
 		string userId = usHand.ThisUser.Id.ToString ();
-    
+
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.UDPRequest (
 			NetworkRoutines.EmptyCallback,
-			new string[] {"user_id"}, 
+			new string[] {"userId"}, 
 			new string[] {userId});
+
+		string sessionId = Constants.sessionId.ToString();
+		Debug.Log ("sessionId=" + sessionId);
+
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.TCPRequest (
+			HandleSessionStart,
+			new string[] {"req", "sessionId"}, 
+			new string[] {"startSession", sessionId});
 		WorkOnSocket ();
+	}
+
+	// TODO Christoph regelt (y).
+	private void HandleSessionStart(string[][] response) {
+		
+		Debug.Log ("HandleSessionStart()");
 	}
 
 	/// <summary>

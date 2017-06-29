@@ -75,7 +75,7 @@ public class NetworkRoutines : MonoBehaviour {
 				if (response.StartsWith (serverError)) {
 					//Debug.Log (serverError + response);
 				} else {
-					//Debug.Log (serverResponse + response);
+					Debug.Log (serverResponse + response);
                     callback (CompileResponse(response));
 				}
 			}
