@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Text.RegularExpressions;
 
 public class CreateSession : MonoBehaviour {
 
 	public GameObject logInCanvas, mainMenuCanvas, createSessionCanvas, startSessionButton, backButton;
+    public Text user_a, user_b, user_c, user_d, headline;
+    private Text[] users;
 
     void Start () {
         createSessionCanvas.SetActive(false);
+        users = new Text[] { user_a, user_b, user_c, user_d };
+        
     }
 	
 	// Update is called once per frame
@@ -44,8 +50,49 @@ public class CreateSession : MonoBehaviour {
 
 				mainMenuCanvas.SetActive(false);
 				createSessionCanvas.SetActive(true);
-				return;
+                StartUpdateLobby();
+                return;
 			}
 		}
 	}
+
+    private IEnumerator UpdateLobby(){
+
+        while (true) {
+
+            string userSession = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
+            GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.TCPRequest(
+                UpdateView,
+                new string[] { "req", "sessionID" },
+                new string[] { "getPlayerInSession", userSession });
+
+
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    private void UpdateView(string[][] response){
+        headline.text ="Wait for Players in Session " + GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
+        string ret = "";
+        foreach (string[] pair in response){
+
+            if (pair[0].Equals("playerInSession")){
+
+                ret += pair[1];
+            }
+            string pattern = @"//";
+            string[] usernames = Regex.Split(ret, pattern);
+
+            for(int i=0; i< usernames.Length; i++) {
+
+                users[i].text = usernames[i];
+            }
+
+        }
+    }
+
+    public void StartUpdateLobby() {
+        StartCoroutine(UpdateLobby());
+    }
+
 }
