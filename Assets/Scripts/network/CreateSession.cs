@@ -44,7 +44,8 @@ public class CreateSession : MonoBehaviour {
 			}
 			if(pair[0].Equals("sessionId")) {
 				int.TryParse(pair[1], out SsIdTmp);
-				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
+				Constants.sessionId = SsIdTmp;
+				// GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
 				// Constants.SoftwareModel.SocketObj.WorkOnSocket();
 				// Debug.Log ("ssId=" + Constants.SoftwareModel.UserHandler.ThisUser.SsId + " tmp=" + SsIdTmp);
 
@@ -59,8 +60,9 @@ public class CreateSession : MonoBehaviour {
     private IEnumerator UpdateLobby(){
 
         while (true) {
-
-            string userSession = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
+			
+			string userSession = Constants.sessionId.ToString();
+            //string userSession = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
             GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.TCPRequest(
                 UpdateView,
                 new string[] { "req", "sessionID" },
@@ -71,8 +73,9 @@ public class CreateSession : MonoBehaviour {
         }
     }
 
-    private void UpdateView(string[][] response){
-        headline.text ="Wait for Players in Session " + GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
+	private void UpdateView(string[][] response){
+		headline.text ="Wait for Players in Session " + Constants.sessionId.ToString();
+		//headline.text ="Wait for Players in Session " + GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
         string ret = "";
         foreach (string[] pair in response){
 

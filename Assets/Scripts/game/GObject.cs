@@ -18,14 +18,7 @@ public class GObject : MonoBehaviour {
 		get { return id; }
 		set { id = value; }
 	}
-	/// <summary>
-	/// Real name of the object.
-	/// </summary>
-	private string objectName = "default";
-	public string ObjectName{
-		get { return Constants.userNames[0]; }
-		set { Constants.userNames[0] = value; }
-	}
+
 	/// <summary>
 	/// Tells, if the object currently moves or is moved by a user.
 	/// </summary>
@@ -37,11 +30,11 @@ public class GObject : MonoBehaviour {
 	/// <summary>
 	/// Database Id of session on server.
 	/// </summary>
-    private int ssId = -1;
+    /*private int ssId = -1;
     public int SsId {
 		get { return Constants.sessionId; }
 		set { Constants.sessionId = value; }
-    }
+    }*/
 	/// <summary>
 	/// true, if changed since last time data where referenced.
 	/// </summary>

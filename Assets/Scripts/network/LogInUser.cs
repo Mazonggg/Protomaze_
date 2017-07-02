@@ -31,8 +31,9 @@ public class LogInUser : MonoBehaviour {
 				logInCanvas.SetActive(false);
 				mainMenuCanvas.SetActive(true);
 
-				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id = IdTmp;
-				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.ObjectName = inputName.GetComponent<InputField>().text;
+				Constants.SetUserInfo(0, IdTmp, inputName.GetComponent<InputField>().text, "");
+				//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id = IdTmp;
+				//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.ObjectName = inputName.GetComponent<InputField>().text;
 
                 return;
             }

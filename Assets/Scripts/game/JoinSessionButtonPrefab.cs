@@ -31,24 +31,21 @@ public class JoinSessionButtonPrefab : MonoBehaviour {
     }
 
 
-    public void SetSessionIdAndGoToLobby(string[][] response)
-    {
+    public void SetSessionIdAndGoToLobby(string[][] response) {
 
         int SsIdTmp = -1;
 
-        foreach (string[] pair in response)
-        {
+        foreach (string[] pair in response) {
 
-            if (pair[0].Equals("type") && pair[1].Equals("ERROR"))
-            {
+            if (pair[0].Equals("type") && pair[1].Equals("ERROR")) {
 
                 Debug.Log("User already assigned to a session or Session does not exist!");
                 return;
             }
-            if (pair[0].Equals("sessionId"))
-            {
+            if (pair[0].Equals("sessionId")) {
                 int.TryParse(pair[1], out SsIdTmp);
-                GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
+				Constants.sessionId = SsIdTmp;
+                // GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
 
                 joinSessionCanvas.SetActive(false);
                 createSessionCanvas.SetActive(true);
@@ -57,5 +54,4 @@ public class JoinSessionButtonPrefab : MonoBehaviour {
             }
         }
     }
-
 }

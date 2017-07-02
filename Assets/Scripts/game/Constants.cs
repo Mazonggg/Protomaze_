@@ -11,8 +11,62 @@ public sealed class Constants {
 	public static float moveSpeed = 10f;
 	public static string softwareModel = "SoftwareModel";
 
+	// Store brief information of users in game.
+	// Necassary for change between gamescenes.
+	private static int[] userIds = {-1, -1, -1, -1};
+	private static string[] userNames = {"", "", "", ""};
+	private static string[] userRefs = {"", "", "", ""};
 
-	public static int[] userIds = {0, 0, 0, 0};
-	public static string[] userNames = {"", "", "", ""};
+	/// <summary>
+	/// Gets the user identifier.
+	/// </summary>
+	/// <returns>The user identifier.</returns>
+	/// <param name="index_in_game">Index in game.</param>
+	public static int GetUserId(int index_in_game) {
+
+		return userIds [index_in_game];
+	}
+	/// <summary>
+	/// Gets the name of the user for a given user_id.
+	/// </summary>
+	/// <returns>The user name.</returns>
+	/// <param name="user_id">User identifier.</param>
+	public static string GetUserName (int user_id) {
+
+		for (int i = 0; i < userIds.Length; i++) {
+			if (userIds [i] == user_id) {
+				return userNames [i];
+			}
+		}
+		return "";
+	}	
+	/// <summary>
+	/// Gets the user ref of the user for a given user_id.
+	/// </summary>
+	/// <returns>The user ref.</returns>
+	/// <param name="user_id">User identifier.</param>
+	public static string GetUserRef (int user_id) {
+
+		for (int i = 0; i < userIds.Length; i++) {
+			if (userIds [i] == user_id) {
+				return userRefs [i];
+			}
+		}
+		return "";
+	}
+
+	/// <summary>
+	/// Sets the name of the user in reference to his/her Id.
+	/// </summary>
+	/// <returns><c>true</c>, if user name was set, <c>false</c> otherwise.</returns>
+	/// <param name="user_id">User identifier.</param>
+	/// <param name="user_name">User name.</param>
+	public static void SetUserInfo(int index_of_user, int user_id, string user_name, string user_ref) {
+
+		userIds [index_of_user] = user_id;
+		userNames [index_of_user] = user_name;
+		userRefs [index_of_user] = user_ref;
+	}
+
 	public static int sessionId = 0;
 }

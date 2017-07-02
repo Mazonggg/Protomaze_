@@ -8,7 +8,6 @@ public class StartLevel_1 : MonoBehaviour {
 	void Start () {
 
 		GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().CreateSocketObject ();
-		GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().PlaceUser();
 	}
 	
 	// Update is called once per frame

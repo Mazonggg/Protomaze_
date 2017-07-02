@@ -26,7 +26,7 @@ public class SoftwareModel_sich_170503: MonoBehaviour {
 
 		timeStamp = Time.realtimeSinceStartup;
 		gameObject.AddComponent<User> ();
-		userHandler = new UserHandler (gameObject.GetComponent<User>());
+		//userHandler = new UserHandler (gameObject.GetComponent<User>());
 		//Debug.Log ("### USER ###");
 		//Debug.Log (gameObject.GetComponent<User> ());
 
@@ -65,7 +65,7 @@ public class SoftwareModel_sich_170503: MonoBehaviour {
 				Debug.Log("KeepConnection():S: " + connection.downloadHandler.text);
 			}
 		}
-		Debug.Log("Start(): " + userHandler.ThisUser.Id + "; " + userHandler.ThisUser.ObjectName);
+		Debug.Log("Start()");
 	}
 
 	private float startTime = 0;
@@ -100,16 +100,7 @@ public class SoftwareModel_sich_170503: MonoBehaviour {
 		Debug.Log("######### STOP #########");
 		Debug.Log(Time.realtimeSinceStartup - startTime);
 	}
-
-
-	/*
-	 * Logs player out, when Game closed.
-	 */
-	void OnApplicationQuit () {
-
-		StartCoroutine (Logout(userHandler.ThisUser.ObjectName));
-		StartCoroutine (WaitForClose ());
-	}
+		
 	/*
 	 * Shuts down the connection to the server, including php-Session.
 	 */

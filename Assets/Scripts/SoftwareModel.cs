@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+using System;
+using System.IO;
 
 /// <summary>
 /// Represents the interface between the unity-game and the functional model of the Software in itself.
@@ -13,6 +14,7 @@ public class SoftwareModel : MonoBehaviour {
 	private UserHandler userHandler;
 	public UserHandler UserHandler {
 		get { return userHandler; }
+		set { userHandler = value; }
 	}
 	private SocketObject socketObj;
 	public SocketObject SocketObj {
@@ -30,14 +32,22 @@ public class SoftwareModel : MonoBehaviour {
     void Start () {
 		
 		//gameObject.AddComponent<User> ();
-		userHandler = new UserHandler (GameObject.Find("User").GetComponent<User>());
+		//userHandler = new UserHandler (GameObject.Find("User").GetComponent<User>());
+		try {
+			userHandler = GameObject.Find ("UserController").GetComponent<UserHandler> ();
+			Debug.Log("userHandler found");
+		} catch (Exception x) {}
+		//UserHandler.AddUser (GameObject.Find ("User").GetComponent<User> ());
 		//socketObj = new SocketObject ();
 		netwRout = gameObject.GetComponent<NetworkRoutines> ();
 	}
 
 	public void PlaceUser() {
 
-		userHandler.ThisUser.Place (new Vector3 (0, 0, 0), new Vector3(0, 0, 0), true);
+		if (userHandler != null) {
+
+			userHandler.ThisUser.Place (new Vector3 (0, 0, 0), new Vector3(0, 0, 0), true);
+		}
 	}
 
 	public void CreateSocketObject(){

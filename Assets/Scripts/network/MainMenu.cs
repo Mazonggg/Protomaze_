@@ -15,8 +15,9 @@ public class MainMenu : MonoBehaviour {
 	}
 		
 	public void LogoutUser() {
-		
-		string userId = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id.ToString();
+
+		string userId = Constants.GetUserId (0).ToString();
+		//string userId = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id.ToString();
         //Debug.Log("LogoutUser: " + userId);
 
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.TCPRequest(
@@ -30,8 +31,9 @@ public class MainMenu : MonoBehaviour {
         logInCanvas.SetActive(true);
 		mainMenuCanvas.SetActive(false);
 
-		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id = -1;
-		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.ObjectName = "default";
+		Constants.SetUserInfo(0, -1, "", "");
+		//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id = -1;
+		//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.ObjectName = "default";
 		//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().SocketObj.Active = false;
 	}
 
@@ -52,7 +54,8 @@ public class MainMenu : MonoBehaviour {
 	/// </summary>
 	public void CreateSession() {
 
-		int IdTmp = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id;
+		int IdTmp = Constants.GetUserId (0);
+		//int IdTmp = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id;
 		//Debug.Log("IdTmp in StartSession: " + IdTmp);
 		string userId = IdTmp.ToString();
 

@@ -9,7 +9,7 @@ using System.Net;
 using System.Net.Sockets;
 
 /// <summary>
-/// Handles all communication with the server.
+/// Handles all UDP communication with the server, while a session is RUNNING, PAUSED or ISSTARTING.
 /// </summary>
 public class SocketObject {
 
@@ -39,7 +39,7 @@ public class SocketObject {
 		SoftwareModel softMod = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ();
 		UserHandler usHand = softMod.UserHandler;
 		User us = usHand.ThisUser;
-		string userId = usHand.ThisUser.Id.ToString ();
+		string userId = Constants.GetUserId(0).ToString();
 
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.UDPRequest (
 			NetworkRoutines.EmptyCallback,
@@ -60,6 +60,22 @@ public class SocketObject {
 	private void HandleSessionStart(string[][] response) {
 		
 		Debug.Log ("HandleSessionStart()");
+
+		string user_ref = "";
+		int user_id = 0;
+		string user_name = "";
+
+		foreach (string[] pair in response) {
+			if (pair[0].Equals ("ur")) {
+					user_ref= pair[1]; 
+			} else if (pair[0].Equals ("ui")) {
+				int.TryParse(pair[1], out user_id);
+			} else if (pair[0].Equals ("un")) {
+				user_name = pair[1];
+				Debug.Log ("HandleSessionStart() 2");
+				GameObject.Find ("UserController").GetComponent<UserHandler> ().AddUser (user_ref, user_id, user_name);
+			}
+		}
 	}
 
 	/// <summary>

@@ -17,12 +17,24 @@ public class User : GObject {
 		get { return objectHeld; }
 		set { objectHeld = value; }
 	}
-
-	private int id = -1;
-	public int Id {
-		get { return Constants.userIds [0]; }
-		set { id = value; Constants.userIds [0] = value; }
+	/// <summary>
+	/// Represents the spot, the user takes in the gaming session.
+	/// </summary>
+	private string user_ref = "";
+	public string User_ref {
+		get { return user_ref; }
+		set { user_ref = value; }
 	}
+	//private int id = -1;
+	private int Id {
+		get { return Constants.GetUserId(GameObject.Find ("UserController").GetComponent<UserHandler> ().GetIndex (this)); }
+		//set { id = value; Constants.userIds [0] = value; }
+	}
+
+	private string UserName {
+		get { return Constants.GetUserName (Id); }
+	}
+
 	/// <summary>
 	/// Returns the relevant data for updating the server, for this object.
 	/// </summary>
@@ -43,6 +55,9 @@ public class User : GObject {
 					objectHeld.UpdateData); 
 			}
 		}
+		set {
+			transform.position = value.Position;
+		}
 	}
 
 	void FixedUpdate(){
@@ -53,8 +68,8 @@ public class User : GObject {
 		}
 	}
 
-	public string GetUserInfo() {
+	/*public string GetUserInfo() {
 		string ret = "id=" + Constants.userIds [0];
 		return ret + " " + ObjectName;
-	}
+	}*/
 }
