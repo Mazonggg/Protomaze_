@@ -10,15 +10,11 @@ public class JoinSession : MonoBehaviour {
     public GameObject JoinButton;
     public GameObject content;
 
-
     void Start () {
 
         JoinSessionCanvas.SetActive(false);
-
     }
-
-
-	
+		
 	// Update is called once per frame
 	void Update () {
 		
@@ -29,8 +25,7 @@ public class JoinSession : MonoBehaviour {
         mainMenuCanvas.SetActive(true);
         JoinSessionCanvas.SetActive(false);
     }
-
-
+		
     private void addButtons(string[][] sessionList) {
 
 

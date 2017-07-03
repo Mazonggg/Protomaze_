@@ -73,29 +73,39 @@ public class CreateSession : MonoBehaviour {
         }
     }
 
+	/// <summary>
+	/// Updates the overview of the lobby and receives the signal to start the level per remote.
+	/// </summary>
+	/// <param name="response">Response.</param>
 	private void UpdateView(string[][] response){
 		headline.text ="Wait for Players in Session " + Constants.sessionId.ToString();
 		//headline.text ="Wait for Players in Session " + GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
         string ret = "";
         foreach (string[] pair in response){
 
-            if (pair[0].Equals("playerInSession")){
+			if (pair [0].Equals ("playerInSession")) {
 
-                ret += pair[1];
-            }
-            string pattern = @"//";
-            string[] usernames = Regex.Split(ret, pattern);
+				ret += pair [1];
+			}
+			string pattern = @"//";
+			string[] usernames = Regex.Split (ret, pattern);
 
-            for(int i=0; i< usernames.Length; i++) {
+			for (int i = 0; i < usernames.Length; i++) {
 
-                users[i].text = usernames[i];
-            }
-
+				users [i].text = usernames [i];
+				if (Constants.GetUserName (Constants.IdSelf).Equals (usernames [i])) {
+					users [i].color = Constants.userColor;
+				}
+			}
+			// Check if the session is ment to be started.
+			if (pair [0].Equals ("sessionIsStarted") && pair [1].Equals ("true")) {
+				// Start the session.
+				gameObject.GetComponent<StartSession> ().StartTheSession ();
+			}
         }
     }
 
     public void StartUpdateLobby() {
         StartCoroutine(UpdateLobby());
     }
-
 }

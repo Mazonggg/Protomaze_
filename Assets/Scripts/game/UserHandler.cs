@@ -48,13 +48,17 @@ public class UserHandler: MonoBehaviour {
 
 		//Debug.Log ("AddUser");
 		if (users.Count < 4) {
-			GameObject usr = GameObject.Instantiate(userPrefab);
+			GameObject usr = GameObject.Instantiate(
+				userPrefab, 
+				StartLevel_1.GetStartPosition(users.Count), 
+				Quaternion.Euler(0, 0, 0), 
+				gameObject.transform);
 			users.Add (usr.GetComponent<User> ());
 			Constants.SetUserInfo(users.IndexOf(usr.GetComponent<User> ()),user_id, user_name, user_ref); 
 			if (Constants.IsMySelf(users.IndexOf(usr.GetComponent<User> ()))) {
 				usr.GetComponent<User> ().IsPlayed = true;
 			}
-			usr.GetComponent<User>().userInfo.GetComponent<TextMesh>().text = user_id + " : " + user_ref + " : " + user_name;
+			usr.GetComponent<User>().userInfo.GetComponent<TextMesh>().text = user_ref + " : " + user_name;
 		}
 	}
 

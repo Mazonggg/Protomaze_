@@ -7,6 +7,7 @@ public sealed class Constants {
 	// Holds all types of GObject forms.
 	public static string[] objectForms = {"Cube", "Cone", "Ball", "Sphere"};
 
+	public static Color userColor = new Color (0.25f, 0.5f, 0.9f);
 	// Movement speed of Users.
 	public static float moveSpeed = 10f;
 	public static string softwareModel = "SoftwareModel";
@@ -15,6 +16,7 @@ public sealed class Constants {
 	// Necassary for change between gamescenes.
 	private static int idSelf = -1;
 	public static int IdSelf {
+		get { return idSelf; }
 		set { idSelf = value; }
 	}
 	private static int[] userIds = {-1, -1, -1, -1};
