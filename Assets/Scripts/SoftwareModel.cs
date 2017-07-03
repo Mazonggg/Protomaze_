@@ -11,7 +11,7 @@ using System.IO;
 /// </summary>
 public class SoftwareModel : MonoBehaviour {
 
-	public UserHandler userHandler;
+	public UserController userController;
 	public NetworkRoutines netwRout;
 
 	private SocketObject socketObj;
@@ -38,9 +38,9 @@ public class SoftwareModel : MonoBehaviour {
 
 	public void PlaceUser() {
 
-		if (userHandler != null) {
+		if (userController != null) {
 
-			userHandler.ThisUser.Place (new Vector3 (0, 0, 0), new Vector3(0, 0, 0), true);
+			userController.ThisUser.Place (new Vector3 (0, 0, 0), new Vector3(0, 0, 0), true);
 		}
 	}
 

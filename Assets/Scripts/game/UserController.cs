@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserHandler: MonoBehaviour {
+/// <summary>
+/// Controls the users in direct relation to the unity-engine.
+/// Handles creation of GameObjects representing the users in a game-session.
+/// </summary>
+public class UserController: MonoBehaviour {
 
 	public GameObject userPrefab;
 
@@ -54,7 +58,6 @@ public class UserHandler: MonoBehaviour {
 	/// <param name="user_name">User name.</param>
 	public void AddUser(string user_ref, int user_id, string user_name) {
 
-		//Debug.Log ("AddUser");
 		if (users.Count < 4) {
 			GameObject usr = GameObject.Instantiate(
 				userPrefab, 
@@ -62,8 +65,8 @@ public class UserHandler: MonoBehaviour {
 				Quaternion.Euler(0, 0, 0), 
 				gameObject.transform);
 			users.Add (usr.GetComponent<User> ());
-			Constants.SetUserInfo(users.IndexOf(usr.GetComponent<User> ()),user_id, user_name, user_ref); 
-			if (Constants.IsMySelf(users.IndexOf(usr.GetComponent<User> ()))) {
+			UserStatics.SetUserInfo(users.IndexOf(usr.GetComponent<User> ()),user_id, user_name, user_ref); 
+			if (UserStatics.IsMySelf(users.IndexOf(usr.GetComponent<User> ()))) {
 				usr.GetComponent<User> ().IsPlayed = true;
 			}
 			usr.GetComponent<User>().userInfo.GetComponent<TextMesh>().text = user_ref + " : " + user_name;
@@ -77,7 +80,7 @@ public class UserHandler: MonoBehaviour {
 	public void UpdateUser (UpdateData user_update) {
 
 		for (int i = 0; i < users.Count; i++) {
-			if (Constants.GetUserId (i) == user_update.Id) {
+			if (UserStatics.GetUserId (i) == user_update.Id) {
 				users [i].UpdateData = user_update;
 			}
 		}

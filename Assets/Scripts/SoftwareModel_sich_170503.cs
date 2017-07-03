@@ -16,7 +16,7 @@ using System.Net.Sockets;
  */
 public class SoftwareModel_sich_170503: MonoBehaviour {
 
-	private UserHandler userHandler;
+	private UserController userHandler;
 	private UnityWebRequest connection;
 
 	private static string serverError = "Error";

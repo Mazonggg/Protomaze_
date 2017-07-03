@@ -28,14 +28,19 @@ public class SocketObject {
 		// Create the socket, that communicates with server.
 		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-		string userId = Constants.GetUserId(0).ToString();
+		string userId = UserStatics.GetUserId(0).ToString();
 
-		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.UDPRequest (
-			NetworkRoutines.EmptyCallback,
-			new string[] {"userId"}, 
-			new string[] {userId});
+		// TODO only call Socket, when this user is the creater of the session!
+		if (UserStatics.IsCreater) {
 
-		string sessionId = Constants.sessionId.ToString();
+			Debug.Log ("I AM THE CREATER!");
+			GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().netwRout.UDPRequest (
+				NetworkRoutines.EmptyCallback,
+				new string[] { "userId" }, 
+				new string[] { userId });
+
+		}
+		string sessionId = UserStatics.sessionId.ToString();
 		//Debug.Log ("sessionId=" + sessionId);
 
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest (
@@ -45,7 +50,10 @@ public class SocketObject {
 		WorkOnSocket ();
 	}
 
-	// TODO Christoph regelt (y).
+	/// <summary>
+	/// Handles the session start. Assigns the other users in the game-session to the respective GameObjects.
+	/// </summary>
+	/// <param name="response">Response.</param>
 	private void HandleSessionStart(string[][] response) {
 		
 		//Debug.Log ("HandleSessionStart()");
@@ -62,7 +70,7 @@ public class SocketObject {
 			} else if (pair[0].Equals ("un")) {
 				user_name = pair[1];
 				//Debug.Log ("HandleSessionStart() 2");
-				GameObject.Find ("UserController").GetComponent<UserHandler> ().AddUser (user_ref, user_id, user_name);
+				GameObject.Find ("UserController").GetComponent<UserController> ().AddUser (user_ref, user_id, user_name);
 			}
 		}
 	}
@@ -97,7 +105,7 @@ public class SocketObject {
 			// Transmitted data
 			currentTime = Time.realtimeSinceStartup;
 			// Only tick, if changes in game state is found and time since last tick fits tickrate.
-			if (GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userHandler.ThisUser.Updated && (currentTime - lastDatagram > 0.04)) {
+			if (GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.ThisUser.Updated && (currentTime - lastDatagram > 0.04)) {
 				SendDatagram ();
 				lastDatagram = currentTime;
 			}
@@ -180,7 +188,7 @@ public class SocketObject {
 				int.TryParse (pos [2], out rotZ);
 
 				// Debug.Log ("2. user_id=" + user_id);
-				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userHandler.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
+				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
 			}
 		}
 	}
@@ -192,11 +200,12 @@ public class SocketObject {
 	/// <returns>The user data.</returns>
 	private string CollectUserData() {
 
-		UserHandler usHand = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().userHandler;
-		User thisUse = usHand.ThisUser;
+		UserController usContr = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().userController;
+		User thisUse = usContr.ThisUser;
+
 		bool updated = thisUse.Updated;
 		if (updated) {
-			UpdateData userData = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userHandler.ThisUser.UpdateData;
+			UpdateData userData = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.ThisUser.UpdateData;
 
 			string msg = "t=";
 			if (userData.ObjectHeld == null) {

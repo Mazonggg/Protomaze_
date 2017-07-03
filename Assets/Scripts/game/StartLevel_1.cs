@@ -21,7 +21,7 @@ public class StartLevel_1 : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-
+		
 		GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().CreateSocketObject ();
 	}
 	

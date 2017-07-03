@@ -44,7 +44,7 @@ public class CreateSession : MonoBehaviour {
 			}
 			if(pair[0].Equals("sessionId")) {
 				int.TryParse(pair[1], out SsIdTmp);
-				Constants.sessionId = SsIdTmp;
+				UserStatics.sessionId = SsIdTmp;
 				// GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
 				// Constants.SoftwareModel.SocketObj.WorkOnSocket();
 				// Debug.Log ("ssId=" + Constants.SoftwareModel.UserHandler.ThisUser.SsId + " tmp=" + SsIdTmp);
@@ -61,9 +61,9 @@ public class CreateSession : MonoBehaviour {
 
         while (true) {
 			
-			string userSession = Constants.sessionId.ToString();
+			string userSession = UserStatics.sessionId.ToString();
             //string userSession = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
-            GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
+			GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
                 UpdateView,
                 new string[] { "req", "sessionID" },
                 new string[] { "getPlayerInSession", userSession });
@@ -78,7 +78,7 @@ public class CreateSession : MonoBehaviour {
 	/// </summary>
 	/// <param name="response">Response.</param>
 	private void UpdateView(string[][] response){
-		headline.text ="Wait for Players in Session " + Constants.sessionId.ToString();
+		headline.text ="Wait for Players in Session " + UserStatics.sessionId.ToString();
 		//headline.text ="Wait for Players in Session " + GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
         string ret = "";
         foreach (string[] pair in response){
@@ -93,14 +93,14 @@ public class CreateSession : MonoBehaviour {
 			for (int i = 0; i < usernames.Length; i++) {
 
 				users [i].text = usernames [i];
-				if (Constants.GetUserName (Constants.IdSelf).Equals (usernames [i])) {
+				if (UserStatics.GetUserName (UserStatics.IdSelf).Equals (usernames [i])) {
 					users [i].color = Constants.userColor;
 				}
 			}
 			// Check if the session is ment to be started.
 			if (pair [0].Equals ("sessionIsStarted") && pair [1].Equals ("true")) {
 				// Start the session.
-				gameObject.GetComponent<StartSession> ().StartTheSession ();
+				gameObject.GetComponent<StartSession> ().LoadNewScene ();
 			}
         }
     }

@@ -23,8 +23,8 @@ public class JoinSessionButtonPrefab : MonoBehaviour {
 
 
     public void MakeRequest() {
-		string userId = Constants.GetUserId(0).ToString();
-        GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
+		string userId = UserStatics.GetUserId(0).ToString();
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
             SetSessionIdAndGoToLobby,
             new string[] { "req", "sessId", "userId" },
             new string[] { "joinSession", sessionIDText.text, userId });
@@ -44,7 +44,7 @@ public class JoinSessionButtonPrefab : MonoBehaviour {
             }
             if (pair[0].Equals("sessionId")) {
                 int.TryParse(pair[1], out SsIdTmp);
-				Constants.sessionId = SsIdTmp;
+				UserStatics.sessionId = SsIdTmp;
                 // GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
 
                 joinSessionCanvas.SetActive(false);

@@ -35,13 +35,13 @@ public class User : GObject {
 	private int Id {
 		get { 
 			//Debug.Log ("User.Id");
-			return Constants.GetUserId(GameObject.Find ("UserController").GetComponent<UserHandler> ().GetIndex (this)); 
+			return UserStatics.GetUserId(GameObject.Find ("UserController").GetComponent<UserController> ().GetIndex (this)); 
 		}
 		//set { id = value; Constants.userIds [0] = value; }
 	}
 
 	private string UserName {
-		get { return Constants.GetUserName (Id); }
+		get { return UserStatics.GetUserName (Id); }
 	}
 
 	/// <summary>

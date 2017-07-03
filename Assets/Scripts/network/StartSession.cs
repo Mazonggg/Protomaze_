@@ -16,13 +16,20 @@ public class StartSession : MonoBehaviour {
 		
 	}
 
-	// TODO implement logic that asks all other players to start their game-session.
 	/// <summary>
 	/// Sends the TCP Request to change Session status to "STARTING",
-	/// Creates the SocketObject.
+	/// Starts the next scene.
 	/// </summary>
 	public void StartTheSession(){
 
+		UserStatics.IsCreater = true;
+		LoadNewScene ();
+	}
+
+	/// <summary>
+	/// Starts the next scene.
+	/// </summary>
+	public void LoadNewScene() {
 		SceneManager.LoadScene ("Level_1");
 	}
 }
