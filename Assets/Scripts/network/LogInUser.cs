@@ -12,9 +12,9 @@ public class LogInUser : MonoBehaviour {
 	public void LoginUser() {
 
 		string name = inputName.GetComponent<InputField>().text;
-		string pwd = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.Md5Sum(inputPwd.GetComponent<InputField> ().text);
+		string pwd = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.Md5Sum(inputPwd.GetComponent<InputField> ().text);
 
-		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.TCPRequest(
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
 			HandleLogin, 
 			new string[] {"req", "userName", "pwd"},
 			new string[] {"loginUser", name, pwd});
@@ -32,6 +32,7 @@ public class LogInUser : MonoBehaviour {
 				mainMenuCanvas.SetActive(true);
 
 				Constants.SetUserInfo(0, IdTmp, inputName.GetComponent<InputField>().text, "");
+				Constants.IdSelf = IdTmp;
 				//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id = IdTmp;
 				//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.ObjectName = inputName.GetComponent<InputField>().text;
 

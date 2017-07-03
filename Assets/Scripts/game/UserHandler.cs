@@ -46,13 +46,15 @@ public class UserHandler: MonoBehaviour {
 	/// <param name="user_name">User name.</param>
 	public void AddUser(string user_ref, int user_id, string user_name) {
 
-		Debug.Log ("AddUser");
+		//Debug.Log ("AddUser");
 		if (users.Count < 4) {
 			GameObject usr = GameObject.Instantiate(userPrefab);
 			users.Add (usr.GetComponent<User> ());
 			Constants.SetUserInfo(users.IndexOf(usr.GetComponent<User> ()),user_id, user_name, user_ref); 
-			//usr.GetComponent<TextMesh> ().text = user_id + " : " + user_ref + " : " + user_name;
-			usr.name = user_id + " : " + user_ref + " : " + user_name;
+			if (Constants.IsMySelf(users.IndexOf(usr.GetComponent<User> ()))) {
+				usr.GetComponent<User> ().IsPlayed = true;
+			}
+			usr.GetComponent<User>().userInfo.GetComponent<TextMesh>().text = user_id + " : " + user_ref + " : " + user_name;
 		}
 	}
 

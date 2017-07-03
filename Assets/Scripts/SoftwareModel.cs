@@ -11,20 +11,14 @@ using System.IO;
 /// </summary>
 public class SoftwareModel : MonoBehaviour {
 
-	private UserHandler userHandler;
-	public UserHandler UserHandler {
-		get { return userHandler; }
-		set { userHandler = value; }
-	}
+	public UserHandler userHandler;
+	public NetworkRoutines netwRout;
+
 	private SocketObject socketObj;
+
 	public SocketObject SocketObj {
 		get { return socketObj; }
 		set { socketObj = value; }
-	}
-	private NetworkRoutines netwRout;
-	public NetworkRoutines NetwRout {
-		get { return netwRout; }
-		set { netwRout = value; }
 	}
 
 	private int i = 0;
@@ -33,13 +27,13 @@ public class SoftwareModel : MonoBehaviour {
 		
 		//gameObject.AddComponent<User> ();
 		//userHandler = new UserHandler (GameObject.Find("User").GetComponent<User>());
-		try {
+		/*try {
 			userHandler = GameObject.Find ("UserController").GetComponent<UserHandler> ();
-			Debug.Log("userHandler found");
+			//Debug.Log("userHandler found");
 		} catch (Exception x) {}
 		//UserHandler.AddUser (GameObject.Find ("User").GetComponent<User> ());
 		//socketObj = new SocketObject ();
-		netwRout = gameObject.GetComponent<NetworkRoutines> ();
+		netwRout = gameObject.GetComponent<NetworkRoutines> ();*/
 	}
 
 	public void PlaceUser() {

@@ -13,6 +13,10 @@ public sealed class Constants {
 
 	// Store brief information of users in game.
 	// Necassary for change between gamescenes.
+	private static int idSelf = -1;
+	public static int IdSelf {
+		set { idSelf = value; }
+	}
 	private static int[] userIds = {-1, -1, -1, -1};
 	private static string[] userNames = {"", "", "", ""};
 	private static string[] userRefs = {"", "", "", ""};
@@ -26,6 +30,17 @@ public sealed class Constants {
 
 		return userIds [index_in_game];
 	}
+
+	/// <summary>
+	/// Determines if the given index of the player in the game represents myself.
+	/// </summary>
+	/// <returns><c>true</c> if is my self the specified index_in_game; otherwise, <c>false</c>.</returns>
+	/// <param name="index_in_game">Index in game.</param>
+	public static bool IsMySelf(int index_in_game){
+
+		return idSelf == userIds [index_in_game];
+	}
+
 	/// <summary>
 	/// Gets the name of the user for a given user_id.
 	/// </summary>
@@ -39,7 +54,8 @@ public sealed class Constants {
 			}
 		}
 		return "";
-	}	
+	}
+
 	/// <summary>
 	/// Gets the user ref of the user for a given user_id.
 	/// </summary>
@@ -68,5 +84,8 @@ public sealed class Constants {
 		userRefs [index_of_user] = user_ref;
 	}
 
+	/// <summary>
+	/// Id of session in database.
+	/// </summary>
 	public static int sessionId = 0;
 }

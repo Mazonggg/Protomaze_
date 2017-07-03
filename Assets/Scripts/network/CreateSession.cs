@@ -63,7 +63,7 @@ public class CreateSession : MonoBehaviour {
 			
 			string userSession = Constants.sessionId.ToString();
             //string userSession = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
-            GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().NetwRout.TCPRequest(
+            GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
                 UpdateView,
                 new string[] { "req", "sessionID" },
                 new string[] { "getPlayerInSession", userSession });

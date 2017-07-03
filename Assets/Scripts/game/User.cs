@@ -7,10 +7,15 @@ using UnityEngine;
 /// </summary>
 public class User : GObject {
 
-	private bool isHost = true;
-	public bool IsHost {
-		get { return isHost; }
-		set { isHost = value; }
+	public GameObject userInfo;
+
+	private bool isPlayed = false;
+	public bool IsPlayed {
+		// get { return isHost; }
+		set { 
+			isPlayed = value;
+			userInfo.GetComponent<MeshRenderer> ().material.color = new Color (0.3f, 0.6f, 1f);
+		}
 	}
 	private GObject objectHeld;
 	public GObject ObjectHeld {
@@ -25,6 +30,7 @@ public class User : GObject {
 		get { return user_ref; }
 		set { user_ref = value; }
 	}
+
 	//private int id = -1;
 	private int Id {
 		get { return Constants.GetUserId(GameObject.Find ("UserController").GetComponent<UserHandler> ().GetIndex (this)); }
@@ -62,7 +68,7 @@ public class User : GObject {
 
 	void FixedUpdate(){
 		
-		if (Input.GetAxis ("Horizontal") != 0 || Input.GetAxis ("Vertical") != 0) {
+		if (isPlayed && (Input.GetAxis ("Horizontal") != 0 || Input.GetAxis ("Vertical") != 0)) {
 			Vector3 dir = new Vector3 (Input.GetAxis ("Horizontal"), 0,Input.GetAxis ("Vertical"));
 			Move (dir, Constants.moveSpeed);
 		}
