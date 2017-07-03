@@ -18,14 +18,6 @@ public class SocketObject {
 	private Thread socketThread;
 	private Socket socket;
 
-
-    private int test = 0;
-   /* private bool active = true;
-	public bool Active {
-		get { return active; }
-		set { active = value; }
-	}*/
-
 	private static int port = 8050;
 	private static IPAddress IPv4 = IPAddress.Parse("81.169.245.94");
 
@@ -118,8 +110,11 @@ public class SocketObject {
 	private void SendDatagram() {
 
 		//sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes ("HALLO " + counting++);
-		sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (CollectUserData ());
+		string info = CollectUserData ();
+			sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (info);
 		sendBytes = socket.SendTo (sendBuf, endPoint);
+
+		Debug.Log ("SendDatagram: " + info);
 	}
 
 
@@ -143,18 +138,7 @@ public class SocketObject {
 				}
 			}
 		}		
-		/*Debug.Log ("ListenToSocket: " + loggg[0]);
-		Debug.Log ("ListenToSocket: " + loggg[1]);
-		Debug.Log ("ListenToSocket: " + loggg[2]);
-		Debug.Log ("ListenToSocket: " + loggg[3]);
-
-		loggg [0] = "";
-		loggg [1] = "";
-		loggg [2] = "";
-		loggg [3] = "";*/
 	}
-
-	private string[] loggg = {"", "", "", ""};
 
 	/// <summary>
 	/// Processes the content of the buf, received from server.
@@ -164,14 +148,41 @@ public class SocketObject {
 	private void ProcessDownBuf(byte[] buf) {
 		
 		string bufString = System.Text.ASCIIEncoding.ASCII.GetString (buf);
-		Debug.Log ("ProcessDownBuf: " + bufString);
-		/*if (loggg[0].Equals("")) {
-			loggg [0] = bufString;
-			loggg [1] = "OWN TIME: " + DateTime.Now.ToString ("HH:mm:ss.fff", System.Globalization.DateTimeFormatInfo.InvariantInfo);
-		} else {
-			loggg [2] = bufString;
-			loggg [3] = "OWN TIME: " + DateTime.Now.ToString ("HH:mm:ss.fff", System.Globalization.DateTimeFormatInfo.InvariantInfo);
-		}*/
+		// Debug.Log ("ProcessDownBuf: " + bufString);
+
+		string[] pairs = bufString.Split('&');
+
+		for (int i = 0; i < pairs.Length; i++) {
+			string[] pair = pairs [i].Split ('=');
+			if (pair [0].Equals ("ui")) {
+				//UpdateData[i] = new Upda
+				int user_id = -1;
+				int.TryParse (pair [1], out user_id);
+				// Debug.Log ("1. user_id=" + user_id);
+				string[] posRot = pairs [i + 1].Split ('=')[1].Split(';');
+				string[] pos = posRot [0].Split('_');
+				string[] rot = posRot [1].Split('_');
+
+				int posX = 999;
+				int posY = 999;
+				int posZ = 999;
+
+				int.TryParse (pos [0], out posX);
+				int.TryParse (pos [1], out posY);
+				int.TryParse (pos [2], out posZ);
+
+				int rotX = 999;
+				int rotY = 999;
+				int rotZ = 999;
+
+				int.TryParse (pos [0], out rotX);
+				int.TryParse (pos [1], out rotY);
+				int.TryParse (pos [2], out rotZ);
+
+				// Debug.Log ("2. user_id=" + user_id);
+				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userHandler.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
+			}
+		}
 	}
 
 	int counter = 0;
@@ -181,7 +192,10 @@ public class SocketObject {
 	/// <returns>The user data.</returns>
 	private string CollectUserData() {
 
-		if (GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userHandler.ThisUser.Updated) {
+		UserHandler usHand = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().userHandler;
+		User thisUse = usHand.ThisUser;
+		bool updated = thisUse.Updated;
+		if (updated) {
 			UpdateData userData = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userHandler.ThisUser.UpdateData;
 
 			string msg = "t=";

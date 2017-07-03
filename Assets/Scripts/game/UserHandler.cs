@@ -18,6 +18,14 @@ public class UserHandler: MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Gets the user count in current session.
+	/// </summary>
+	/// <value>The user count.</value>
+	public int UserCount {
+		get { return users.Count; }
+	}
+
+	/// <summary>
 	/// Gets the identifier of the user in database.
 	/// </summary>
 	/// <returns>The identifier.</returns>
@@ -63,16 +71,14 @@ public class UserHandler: MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Updates the users.
+	/// Updates the user.
 	/// </summary>
-	/// <param name="user_updates">User updates.</param>
-	public void UpdateUsers (UpdateData[] user_updates) {
+	/// <param name="user_update">User update.</param>
+	public void UpdateUser (UpdateData user_update) {
 
-		foreach(User user in users) {
-			foreach (UpdateData user_update in user_updates) {
-				if (user.Id == user_update.Id) {
-					user.UpdateData = user_update;
-				}
+		for (int i = 0; i < users.Count; i++) {
+			if (Constants.GetUserId (i) == user_update.Id) {
+				users [i].UpdateData = user_update;
 			}
 		}
 	}

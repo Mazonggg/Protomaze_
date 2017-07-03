@@ -33,7 +33,10 @@ public class User : GObject {
 
 	//private int id = -1;
 	private int Id {
-		get { return Constants.GetUserId(GameObject.Find ("UserController").GetComponent<UserHandler> ().GetIndex (this)); }
+		get { 
+			//Debug.Log ("User.Id");
+			return Constants.GetUserId(GameObject.Find ("UserController").GetComponent<UserHandler> ().GetIndex (this)); 
+		}
 		//set { id = value; Constants.userIds [0] = value; }
 	}
 
@@ -52,17 +55,18 @@ public class User : GObject {
 				return new UpdateData (
 					Id, 
 					new Vector3 (transform.position.x, transform.position.y, transform.position.z), 
-					new Vector3 (transform.rotation.x, transform.rotation.y, transform.rotation.z)); 
+					new Vector3 (transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)); 
 			} else {
 				return new UpdateData (
 					Id, 
 					new Vector3 (transform.position.x, transform.position.y, transform.position.z), 
-					new Vector3 (transform.rotation.x, transform.rotation.y, transform.rotation.z),
+					new Vector3 (transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z),
 					objectHeld.UpdateData); 
 			}
 		}
 		set {
 			transform.position = value.Position;
+			transform.rotation = Quaternion.Euler (value.Rotation.x, value.Rotation.y, value.Rotation.z);
 		}
 	}
 
