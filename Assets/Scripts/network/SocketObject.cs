@@ -102,6 +102,7 @@ public class SocketObject {
 
 		SendDatagram();
 		while (true) {
+			Debug.Log ("TELLING: " + socket.LingerState);
 			// Transmitted data
 			currentTime = Time.realtimeSinceStartup;
 			// Only tick, if changes in game state is found and time since last tick fits tickrate.
@@ -119,10 +120,8 @@ public class SocketObject {
 
 		//sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes ("HALLO " + counting++);
 		string info = CollectUserData ();
-			sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (info);
+		sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (info);
 		sendBytes = socket.SendTo (sendBuf, endPoint);
-
-		Debug.Log ("SendDatagram: " + info);
 	}
 
 
@@ -137,6 +136,7 @@ public class SocketObject {
 		yield return new WaitForSeconds(1f);
 
 		while (true) {
+			Debug.Log ("LISTENING");
 			yield return null;
 			if (socket.Poll(0, SelectMode.SelectRead)) {
 				int bytesReceived = socket.Receive(receiveBuf, 0, receiveBuf.Length, SocketFlags.None);
@@ -154,40 +154,40 @@ public class SocketObject {
 	/// </summary>
 	/// <param name="buf">Buffer.</param>
 	private void ProcessDownBuf(byte[] buf) {
-		
+
 		string bufString = System.Text.ASCIIEncoding.ASCII.GetString (buf);
-		// Debug.Log ("ProcessDownBuf: " + bufString);
+		Debug.Log ("ProcessDownBuf: " + bufString);
 
 		string[] pairs = bufString.Split('&');
 
 		for (int i = 0; i < pairs.Length; i++) {
 			string[] pair = pairs [i].Split ('=');
 			if (pair [0].Equals ("ui")) {
-				//UpdateData[i] = new Upda
+				
 				int user_id = -1;
 				int.TryParse (pair [1], out user_id);
-				// Debug.Log ("1. user_id=" + user_id);
+				Debug.Log ("1. user_id=" + user_id);
 				string[] posRot = pairs [i + 1].Split ('=')[1].Split(';');
 				string[] pos = posRot [0].Split('_');
 				string[] rot = posRot [1].Split('_');
 
-				int posX = 999;
-				int posY = 999;
-				int posZ = 999;
+				float posX = 999;
+				float posY = 999;
+				float posZ = 999;
 
-				int.TryParse (pos [0], out posX);
-				int.TryParse (pos [1], out posY);
-				int.TryParse (pos [2], out posZ);
+				float.TryParse (pos [0], out posX);
+				float.TryParse (pos [1], out posY);
+				float.TryParse (pos [2], out posZ);
 
-				int rotX = 999;
-				int rotY = 999;
-				int rotZ = 999;
+				float rotX = 999;
+				float rotY = 999;
+				float rotZ = 999;
 
-				int.TryParse (pos [0], out rotX);
-				int.TryParse (pos [1], out rotY);
-				int.TryParse (pos [2], out rotZ);
+				float.TryParse (pos [0], out rotX);
+				float.TryParse (pos [1], out rotY);
+				float.TryParse (pos [2], out rotZ);
 
-				// Debug.Log ("2. user_id=" + user_id);
+				//Debug.Log ("2. user_id=" + user_id);
 				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
 			}
 		}

@@ -79,6 +79,7 @@ public class UserController: MonoBehaviour {
 	/// <param name="user_update">User update.</param>
 	public void UpdateUser (UpdateData user_update) {
 
+		Debug.Log ("UpdateUser: " + user_update.Id + " pos: " + user_update.Position.x + "," +user_update.Position.y + "," + user_update.Position.z );
 		for (int i = 0; i < users.Count; i++) {
 			if (UserStatics.GetUserId (i) == user_update.Id) {
 				users [i].UpdateData = user_update;
