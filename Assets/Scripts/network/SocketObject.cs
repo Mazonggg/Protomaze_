@@ -205,7 +205,7 @@ public class SocketObject {
 
 		bool updated = thisUse.Updated;
 		if (updated) {
-			UpdateData userData = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.ThisUser.UpdateData;
+			UpdateData userData = thisUse.UpdateData;
 
 			string msg = "t=";
 			if (userData.ObjectHeld == null) {

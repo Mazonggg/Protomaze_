@@ -13,11 +13,11 @@ public class GObject : MonoBehaviour {
 	/// Database Id of this object on server.
 	/// </summary>
 	private int id = -1;
-	public int Id
+	/*public int Id
 	{
 		get { return id; }
 		set { id = value; }
-	}
+	}*/
 
 	/// <summary>
 	/// Tells, if the object currently moves or is moved by a user.

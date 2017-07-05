@@ -136,7 +136,7 @@ public class SoftwareModel_sich_170503: MonoBehaviour {
 	 	 */
 	public bool Reconnect (User usr){
 		
-		connection = UnityWebRequest.Get("http://h2678361.stratoserver.net/reconnectUser.php?userId=" + usr.Id);
+		connection = UnityWebRequest.Get("http://h2678361.stratoserver.net/reconnectUser.php?userId=" + UserStatics.IdSelf);
 
 		return true;
 	}
