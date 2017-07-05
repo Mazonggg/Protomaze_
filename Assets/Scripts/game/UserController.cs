@@ -10,14 +10,22 @@ public class UserController: MonoBehaviour {
 
 	public GameObject userPrefab;
 
+	//int counter = 0;
 	private List<User> users = new List<User>();
 	public User ThisUser {
 		get { 
-			if (users.Count > 0) {
-				return users [0]; 
-			} else {
-				return null;
+			//counter++;
+			//string userLog = "///// idSelf=" + UserStatics.IdSelf + " ///// ";
+			int uid = -1;
+			for (int i = 0; i < users.Count; i++) {
+				uid = UserStatics.GetUserId (i);
+				// userLog += "i=" + i + " ; id=" + uid + " ; name=" + UserStatics.GetUserName(uid) + " ; ref=" + UserStatics.GetUserRef(uid) + " /// ";
+				if (uid == UserStatics.IdSelf) {
+					// Debug.Log (counter + "UserController.ThisUser= " + userLog);
+					return users [i]; 
+				}
 			}
+			return null;
 		}
 	}
 
@@ -79,11 +87,24 @@ public class UserController: MonoBehaviour {
 	/// <param name="user_update">User update.</param>
 	public void UpdateUser (UpdateData user_update) {
 
-		Debug.Log ("UpdateUser: " + user_update.Id + " pos: " + user_update.Position.x + "," +user_update.Position.y + "," + user_update.Position.z );
+		/*string stat = "/// idSelf=" + UserStatics.IdSelf + " /// ";
+		for (int i = 0; i<users.Count; i++) {
+			stat += "i=" + i + " ; isPlayed=" + users[i].IsPlayed + " ; updated=" + users[i].Updated + " /// ";
+		}
+		Debug.Log (stat);*/
+
+
+		// Debug.Log ("UpdateUser: " + user_update.Id + " pos: " + user_update.Position.x + "," +user_update.Position.y + "," + user_update.Position.z );
 		for (int i = 0; i < users.Count; i++) {
 			if (UserStatics.GetUserId (i) == user_update.Id) {
 				users [i].UpdateData = user_update;
 			}
 		}
+	}
+
+	private int counter = 0;
+	void FixedUpdate() {
+
+		//Debug.Log (counter++ + ". ThisUser.Updated=" + ThisUser.Updated);
 	}
 }

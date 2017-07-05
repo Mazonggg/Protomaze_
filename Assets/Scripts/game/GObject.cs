@@ -38,7 +38,7 @@ public class GObject : MonoBehaviour {
 	/// <summary>
 	/// true, if changed since last time data where referenced.
 	/// </summary>
-	private bool updated = true;
+	private bool updated = false;
 	public bool Updated {
 		get { return updated; }
 		set { updated = value; }
@@ -49,7 +49,6 @@ public class GObject : MonoBehaviour {
 	/// <value>The update data.</value>
 	public UpdateData UpdateData {
 		get { 
-			updated = false;
 			return new UpdateData (
 				id, 
 				new Vector3(transform.position.x,transform.position.y,transform.position.z), 
@@ -95,4 +94,5 @@ public class GObject : MonoBehaviour {
 		transform.position += dir * pace * Time.deltaTime;
 		updated = true;
 	}
+
 }

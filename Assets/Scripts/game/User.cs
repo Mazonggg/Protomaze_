@@ -11,7 +11,7 @@ public class User : GObject {
 
 	private bool isPlayed = false;
 	public bool IsPlayed {
-		// get { return isHost; }
+		get { return isPlayed; }
 		set { 
 			isPlayed = value;
 			userInfo.GetComponent<MeshRenderer> ().material.color = Constants.userColor;
@@ -49,7 +49,7 @@ public class User : GObject {
 	/// </summary>
 	/// <value>The update data.</value>
 	public UpdateData UpdateData {
-		get { 
+		get {
 			Updated = false;
 			if (objectHeld == null) {
 				return new UpdateData (

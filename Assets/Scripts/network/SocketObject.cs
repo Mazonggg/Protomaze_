@@ -33,7 +33,7 @@ public class SocketObject {
 		// TODO only call Socket, when this user is the creater of the session!
 		if (UserStatics.IsCreater) {
 
-			Debug.Log ("I AM THE CREATER!");
+			// Debug.Log ("I AM THE CREATER!");
 			GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().netwRout.UDPRequest (
 				NetworkRoutines.EmptyCallback,
 				new string[] { "userId" }, 
@@ -102,11 +102,14 @@ public class SocketObject {
 
 		SendDatagram();
 		while (true) {
-			Debug.Log ("TELLING: " + socket.LingerState);
+			//Debug.Log ("TELL");
 			// Transmitted data
 			currentTime = Time.realtimeSinceStartup;
 			// Only tick, if changes in game state is found and time since last tick fits tickrate.
-			if (GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.ThisUser.Updated && (currentTime - lastDatagram > 0.04)) {
+			User usr = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.ThisUser;
+			// Debug.Log ("TellSocket: usr.Updated=" + usr.Updated);
+			if (usr.Updated && (currentTime - lastDatagram > 0.04)) {
+			//if (/*usr.Updated && */(currentTime - lastDatagram > 0.04)) {
 				SendDatagram ();
 				lastDatagram = currentTime;
 			}
@@ -120,6 +123,7 @@ public class SocketObject {
 
 		//sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes ("HALLO " + counting++);
 		string info = CollectUserData ();
+		//Debug.Log ("SendDatagram=" + info);
 		sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (info);
 		sendBytes = socket.SendTo (sendBuf, endPoint);
 	}
@@ -136,7 +140,7 @@ public class SocketObject {
 		yield return new WaitForSeconds(1f);
 
 		while (true) {
-			Debug.Log ("LISTENING");
+			//Debug.Log ("LISTEN");
 			yield return null;
 			if (socket.Poll(0, SelectMode.SelectRead)) {
 				int bytesReceived = socket.Receive(receiveBuf, 0, receiveBuf.Length, SocketFlags.None);
@@ -156,7 +160,7 @@ public class SocketObject {
 	private void ProcessDownBuf(byte[] buf) {
 
 		string bufString = System.Text.ASCIIEncoding.ASCII.GetString (buf);
-		Debug.Log ("ProcessDownBuf: " + bufString);
+		//Debug.Log ("ProcessDownBuf: " + bufString);
 
 		string[] pairs = bufString.Split('&');
 
@@ -166,7 +170,7 @@ public class SocketObject {
 				
 				int user_id = -1;
 				int.TryParse (pair [1], out user_id);
-				Debug.Log ("1. user_id=" + user_id);
+				// Debug.Log ("1. user_id=" + user_id);
 				string[] posRot = pairs [i + 1].Split ('=')[1].Split(';');
 				string[] pos = posRot [0].Split('_');
 				string[] rot = posRot [1].Split('_');
@@ -199,7 +203,7 @@ public class SocketObject {
 	/// </summary>
 	/// <returns>The user data.</returns>
 	private string CollectUserData() {
-
+		
 		UserController usContr = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().userController;
 		User thisUse = usContr.ThisUser;
 
@@ -234,7 +238,7 @@ public class SocketObject {
 					userData.ObjectHeld.Rotation.z;
 			}
 
-			// Debug.Log("CollectUserData: " + msg);
+			//Debug.Log("CollectUserData: " + msg);
 			return msg;
 		}
 		return "";

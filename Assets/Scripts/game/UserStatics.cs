@@ -58,7 +58,7 @@ public sealed class UserStatics {
 				return userNames [i];
 			}
 		}
-		return "";
+		return "nothing found";
 	}
 
 	/// <summary>
@@ -73,7 +73,7 @@ public sealed class UserStatics {
 				return userRefs [i];
 			}
 		}
-		return "";
+		return "nothing found";
 	}
 
 	/// <summary>
