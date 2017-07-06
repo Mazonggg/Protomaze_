@@ -9,7 +9,7 @@ using UnityEngine;
 /// when changing scenes in the game, without implementing
 /// a local database.
 /// </summary>
-public sealed class UserStatics {
+public class UserStatics {
 
 	private static int idSelf = -1;
 	public static int IdSelf {

@@ -114,7 +114,7 @@ public class CreateSession : MonoBehaviour {
 				}
 			}
 			// Check if the session is ment to be started.
-			if (pair [0].Equals ("sessionIsStarted") && pair [1].Equals ("true")) {
+			if (pair [0].Equals (Constants.sfState) && pair [1].Equals (Constants.sfStarting)) {
 				// Start the session.
 				gameObject.GetComponent<StartSession> ().LoadNewScene ();
 			}

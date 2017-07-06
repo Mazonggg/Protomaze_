@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Constants {
+public sealed class Constants {
 
 	// Holds all types of GObject forms.
 	public static string[] objectForms = {"Cube", "Cone", "Ball", "Sphere"};
@@ -15,4 +15,12 @@ public class Constants {
 	public static string softwareModel = "SoftwareModel";
 	public static string noUser = "noUser";
 	public static string freeUser = "free";
+
+	// Server Flags.
+	public static string sfState = "state";
+	public static string sfPaused = "PAUSED";
+	public static string sfStarting = "ISSTARTING";
+	public static string sfRunning = "RUNNING";
+	public static string sfPConnected = "CONNECTED";
+	public static string sfError = "ERROR";
 }

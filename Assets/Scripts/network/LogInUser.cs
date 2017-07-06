@@ -9,6 +9,14 @@ public class LogInUser : MonoBehaviour {
 	public GameObject inputName, inputPwd;
 	public GameObject logInCanvas, mainMenuCanvas;
 
+	void Start() {
+
+		if (UserStatics.IdSelf > -1) {
+
+			HideMenu ();
+		}
+	}
+
 	public void LoginUser() {
 
 		string name = inputName.GetComponent<InputField>().text;
@@ -28,17 +36,17 @@ public class LogInUser : MonoBehaviour {
 				
                 int IdTmp = -1;
 				int.TryParse(pair[1], out IdTmp);
-				logInCanvas.SetActive(false);
-				mainMenuCanvas.SetActive(true);
+				HideMenu ();
 
 				UserStatics.SetUserLoggedIn (IdTmp, inputName.GetComponent<InputField> ().text);
-				//UserStatics.SetUserInfo(0, IdTmp, inputName.GetComponent<InputField>().text, "");
-				//UserStatics.IdSelf = IdTmp;
-				//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id = IdTmp;
-				//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.ObjectName = inputName.GetComponent<InputField>().text;
-
                 return;
             }
         }
+	}
+
+	private void HideMenu() {
+
+		logInCanvas.SetActive(false);
+		mainMenuCanvas.SetActive(true);
 	}
 }

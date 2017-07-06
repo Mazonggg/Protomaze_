@@ -194,6 +194,11 @@ public class SocketObject {
 				//Debug.Log ("2. user_id=" + user_id);
 				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
 			}
+			if (pair [0].Equals (Constants.sfState) && pair [1].Equals (Constants.sfPaused)) {
+				// LOGIC FOR PAUSING THE GAME.
+			} else if (pair [0].Equals (Constants.sfState) && pair [1].Equals (Constants.sfRunning)) {
+				// LOGIC TO RESUME THE GAME.
+			}
 		}
 	}
 
