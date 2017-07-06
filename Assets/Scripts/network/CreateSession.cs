@@ -22,16 +22,27 @@ public class CreateSession : MonoBehaviour {
 	}
 
     public void goBack() {
+        GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
+            ResetUserInfo,
+            new string[] { "req", "userId" },
+            new string[] { "leaveSession", UserStatics.IdSelf.ToString() });
+
+
         mainMenuCanvas.SetActive(true);
         createSessionCanvas.SetActive(false);
     }
 
+    private void ResetUserInfo(string[][] response) {
 
-	/// <summary>
-	/// Assigns the session just created (on server) to the user on this client.
-	/// </summary>
-	/// <param name="response">Response.</param>
-	public void AssignSessionToUser(string[][] response) {
+        UserStatics.SetUserInfo(0, UserStatics.IdSelf, UserStatics.GetUserName(UserStatics.IdSelf), "");
+    }
+
+
+    /// <summary>
+    /// Assigns the session just created (on server) to the user on this client.
+    /// </summary>
+    /// <param name="response">Response.</param>
+    public void AssignSessionToUser(string[][] response) {
 
 		int SsIdTmp = -1;
 
@@ -45,10 +56,9 @@ public class CreateSession : MonoBehaviour {
 			if(pair[0].Equals("sessionId")) {
 				int.TryParse(pair[1], out SsIdTmp);
 				UserStatics.sessionId = SsIdTmp;
-				// GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
-				// Constants.SoftwareModel.SocketObj.WorkOnSocket();
-				// Debug.Log ("ssId=" + Constants.SoftwareModel.UserHandler.ThisUser.SsId + " tmp=" + SsIdTmp);
-
+                // GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
+                // Constants.SoftwareModel.SocketObj.WorkOnSocket();
+                // Debug.Log ("ssId=" + Constants.SoftwareModel.UserHandler.ThisUser.SsId + " tmp=" + SsIdTmp);
 				mainMenuCanvas.SetActive(false);
 				createSessionCanvas.SetActive(true);
                 StartUpdateLobby();
