@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour {
 	
 	public GameObject resumeButton, quitButton, pauseMenuCanvas;
-	public GameObject debugText;
+	public GameObject debugText, timerText;
 
 	private bool gamePaused = false;
 
@@ -19,7 +19,7 @@ public class PauseMenu : MonoBehaviour {
 	}
 
 
-	void FixedUpdate(){
+	void Update(){
 		
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			TogglePause (!gamePaused);
@@ -54,6 +54,8 @@ public class PauseMenu : MonoBehaviour {
 		debugText.GetComponent<Text> ().text = "Game paused: " + gamePaused;
 
 		Debug.Log("TogglePause end: " + gamePaused);
+		Time.timeScale = (stop ? 0f : 1f);
+		timerText.GetComponent<TimerScript> ().Count (!stop);
 		// LOGIC TO RESUME GAME.
 	}
 }
