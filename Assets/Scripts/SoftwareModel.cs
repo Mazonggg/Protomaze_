@@ -44,9 +44,10 @@ public class SoftwareModel : MonoBehaviour {
 		}
 	}
 
-	public void CreateSocketObject(){
+	public void CreateSocketObject(int timer){
 		
-		socketObj = new SocketObject ();
+		socketObj = new SocketObject (timer);
+		TimerScript.Timer = timer;
 	}
 
 	public void DestroySocketObject() {

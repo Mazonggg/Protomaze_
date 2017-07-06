@@ -23,7 +23,7 @@ public class SocketObject {
 
 	private IPEndPoint endPoint = new IPEndPoint(IPv4, port);
 
-	public SocketObject(){
+	public SocketObject(int timer){
 		
 		// Create the socket, that communicates with server.
 		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -36,8 +36,8 @@ public class SocketObject {
 			// Debug.Log ("I AM THE CREATER!");
 			GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().netwRout.UDPRequest (
 				NetworkRoutines.EmptyCallback,
-				new string[] { "userId" }, 
-				new string[] { userId });
+				new string[] { "userId", "timer" }, 
+				new string[] { userId, timer.ToString() });
 
 		}
 		string sessionId = UserStatics.sessionId.ToString();

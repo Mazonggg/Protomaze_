@@ -11,7 +11,7 @@ public class PauseMenu : MonoBehaviour {
 	public GameObject resumeButton, quitButton, pauseMenuCanvas;
 	public GameObject debugText;
 
-	private bool gameRunning = false;
+	private bool gamePaused = false;
 
 	void Start() {
 
@@ -22,7 +22,7 @@ public class PauseMenu : MonoBehaviour {
 	void FixedUpdate(){
 		
 		if (Input.GetKeyDown(KeyCode.Escape)) {
-			TogglePause (!gameRunning);
+			TogglePause (!gamePaused);
 		}
 	}
 
@@ -48,12 +48,12 @@ public class PauseMenu : MonoBehaviour {
 
 	private void TogglePause(bool stop) {
 
-		Debug.Log("TogglePause start: " + gameRunning);
+		Debug.Log("TogglePause start: " + gamePaused);
 		pauseMenuCanvas.SetActive(stop);
-		gameRunning = stop;
-		debugText.GetComponent<Text> ().text = "Game Running: " + gameRunning;
+		gamePaused = stop;
+		debugText.GetComponent<Text> ().text = "Game paused: " + gamePaused;
 
-		Debug.Log("TogglePause end: " + gameRunning);
+		Debug.Log("TogglePause end: " + gamePaused);
 		// LOGIC TO RESUME GAME.
 	}
 }
