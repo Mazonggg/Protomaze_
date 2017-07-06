@@ -38,7 +38,7 @@ public class MainMenu : MonoBehaviour {
 		mainMenuCanvas.SetActive(false);
 		joinSessionCanvas.SetActive(true);
 
-		joinSessionController.GetComponent<JoinSession>().getSessions();   
+		joinSessionController.GetComponent<JoinSession>().GetSessions();   
 	}
 
 
