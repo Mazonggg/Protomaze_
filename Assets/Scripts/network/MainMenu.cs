@@ -16,9 +16,7 @@ public class MainMenu : MonoBehaviour {
 		
 	public void LogoutUser() {
 
-		string userId = UserStatics.GetUserId (0).ToString();
-		//string userId = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id.ToString();
-        //Debug.Log("LogoutUser: " + userId);
+		string userId = UserStatics.IdSelf.ToString();
 
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
             HandleLogout, 
@@ -32,9 +30,6 @@ public class MainMenu : MonoBehaviour {
 		mainMenuCanvas.SetActive(false);
 
 		UserStatics.SetUserInfo(0, -1, "", "");
-		//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id = -1;
-		//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.ObjectName = "default";
-		//GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().SocketObj.Active = false;
 	}
 
 
@@ -43,9 +38,7 @@ public class MainMenu : MonoBehaviour {
 		mainMenuCanvas.SetActive(false);
 		joinSessionCanvas.SetActive(true);
 
-		joinSessionController.GetComponent<JoinSession>().getSessions();        //Das die referenzierung bei MonoBehaviour so doof ist ...
-		//  JoinSession js = new global::JoinSession();
-		//  js.getSessions();
+		joinSessionController.GetComponent<JoinSession>().getSessions();   
 	}
 
 
@@ -53,11 +46,8 @@ public class MainMenu : MonoBehaviour {
 	/// Sets up request to server, that creates the session
 	/// </summary>
 	public void CreateSession() {
-
-		int IdTmp = UserStatics.GetUserId (0);
-		//int IdTmp = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.Id;
-		//Debug.Log("IdTmp in StartSession: " + IdTmp);
-		string userId = IdTmp.ToString();
+		
+		string userId = UserStatics.IdSelf.ToString();
 
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
 			createSessionCanvas.GetComponentInChildren<CreateSession>().AssignSessionToUser, 

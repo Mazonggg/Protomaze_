@@ -103,8 +103,14 @@ public class CreateSession : MonoBehaviour {
 			for (int i = 0; i < usernames.Length; i++) {
 
 				users [i].text = usernames [i];
+				users [i].fontStyle = FontStyle.Bold;
 				if (UserStatics.GetUserName (UserStatics.IdSelf).Equals (usernames [i])) {
 					users [i].color = Constants.userColor;
+				} else if(usernames[i].Equals(Constants.noUser)) {
+					users [i].text = Constants.freeUser;
+					users [i].fontStyle = FontStyle.Normal;
+				} else {
+					users [i].color = Constants.defaultColor;
 				}
 			}
 			// Check if the session is ment to be started.
