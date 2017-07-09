@@ -29,19 +29,18 @@ public class SocketObject {
 		socket = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
 		string userId = UserStatics.GetUserId(0).ToString();
-
+		string sessionId = UserStatics.SessionId.ToString();
 		// TODO only call Socket, when this user is the creater of the session!
 		if (UserStatics.IsCreater) {
 
 			// Debug.Log ("I AM THE CREATER!");
 			GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().netwRout.UDPRequest (
 				NetworkRoutines.EmptyCallback,
-				new string[] { "userId", "timer" }, 
-				new string[] { userId, timer.ToString() });
+				new string[] { "userId", "timer", "sessionId" }, 
+				new string[] { userId, timer.ToString(),  sessionId});
 
 		}
-		string sessionId = UserStatics.sessionId.ToString();
-		//Debug.Log ("sessionId=" + sessionId);
+		//Debug.Log ("sessionId=" + SessionId);
 
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest (
 			HandleSessionStart,
@@ -160,7 +159,7 @@ public class SocketObject {
 	private void ProcessDownBuf(byte[] buf) {
 
 		string bufString = System.Text.ASCIIEncoding.ASCII.GetString (buf);
-		//Debug.Log ("ProcessDownBuf: " + bufString);
+		Debug.Log ("ProcessDownBuf: " + bufString);
 
 		string[] pairs = bufString.Split('&');
 
@@ -193,11 +192,22 @@ public class SocketObject {
 
 				//Debug.Log ("2. user_id=" + user_id);
 				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
-			}
-			if (pair [0].Equals (Constants.sfState) && pair [1].Equals (Constants.sfPaused)) {
-				// LOGIC FOR PAUSING THE GAME.
-			} else if (pair [0].Equals (Constants.sfState) && pair [1].Equals (Constants.sfRunning)) {
-				// LOGIC TO RESUME THE GAME.
+			} else if (pair [0].Equals (Constants.sfState)) {
+
+				if (pair [1].Equals (Constants.sfPaused)) {
+					// LOGIC FOR PAUSING THE GAME.
+					Debug.Log ("state=" + Constants.sfPaused);		
+					GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().TogglePause (true);
+				} else if (pair [1].Equals (Constants.sfRunning)) {
+					// LOGIC TO RESUME THE GAME.
+					Debug.Log ("state=" + Constants.sfRunning);
+					GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().TogglePause (false);
+				}
+				GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().ShowState (pair [1]);
+			} else if(pair[0].Equals (Constants.sfTimer)) {
+				int time = 0;
+				int.TryParse (pair [1], out time);
+				GameObject.Find ("TimerText").GetComponent<TimerScript> ().SetTimer (time);
 			}
 		}
 	}

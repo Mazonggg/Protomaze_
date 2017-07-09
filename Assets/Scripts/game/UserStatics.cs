@@ -102,5 +102,9 @@ public class UserStatics {
 	/// <summary>
 	/// Id of session in database.
 	/// </summary>
-	public static int sessionId = 0;
+	private static int sessionId = 0;
+	public static int SessionId {
+		get { return sessionId; }
+		set { sessionId = value; }
+	}
 }

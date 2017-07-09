@@ -22,16 +22,29 @@ public class PauseMenu : MonoBehaviour {
 	void Update(){
 		
 		if (Input.GetKeyDown(KeyCode.Escape)) {
-			TogglePause (!gamePaused);
+			//TogglePause (!gamePaused);
+			if (gamePaused) {
+				Resume ();
+			} else {
+				Pause ();
+			}
 		}
 	}
 
 	public void Pause() {
-		TogglePause (true);
+		//TogglePause (true);
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
+			NetworkRoutines.EmptyCallback,
+			new string[] { "req", "sessionId" },
+			new string[] { "pauseSession", UserStatics.SessionId.ToString() });
 	}
 
 	public void Resume() {
-		TogglePause (false);
+		//TogglePause (false);
+		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
+			NetworkRoutines.EmptyCallback,
+			new string[] { "req", "sessionId" },
+			new string[] { "resumeSession", UserStatics.SessionId.ToString() });
 	}
 
 	public void Quit() {
@@ -46,16 +59,20 @@ public class PauseMenu : MonoBehaviour {
 		SceneManager.LoadScene ("Menu");
 	}
 
-	private void TogglePause(bool stop) {
+	public void TogglePause(bool stop) {
 
 		Debug.Log("TogglePause start: " + gamePaused);
 		pauseMenuCanvas.SetActive(stop);
 		gamePaused = stop;
-		debugText.GetComponent<Text> ().text = "Game paused: " + gamePaused;
 
 		Debug.Log("TogglePause end: " + gamePaused);
 		Time.timeScale = (stop ? 0f : 1f);
-		timerText.GetComponent<TimerScript> ().Count (!stop);
 		// LOGIC TO RESUME GAME.
+	}
+
+	// TODO dev. helper
+	public void ShowState(string state) {
+
+		debugText.GetComponent<Text> ().text = "Game state: " + state;
 	}
 }

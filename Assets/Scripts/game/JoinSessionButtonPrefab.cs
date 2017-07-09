@@ -44,7 +44,7 @@ public class JoinSessionButtonPrefab : MonoBehaviour {
             }
             if (pair[0].Equals("sessionId")) {
                 int.TryParse(pair[1], out SsIdTmp);
-				UserStatics.sessionId = SsIdTmp;
+				UserStatics.SessionId = SsIdTmp;
                 // GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
 
                 joinSessionCanvas.SetActive(false);

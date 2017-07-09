@@ -17,6 +17,7 @@ public sealed class Constants {
 	public static string freeUser = "free";
 
 	// Server Flags.
+	public static string sfTimer = "timer";
 	public static string sfState = "state";
 	public static string sfPaused = "PAUSED";
 	public static string sfStarting = "ISSTARTING";
