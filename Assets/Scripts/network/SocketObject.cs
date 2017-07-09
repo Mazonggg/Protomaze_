@@ -159,7 +159,7 @@ public class SocketObject {
 	private void ProcessDownBuf(byte[] buf) {
 
 		string bufString = System.Text.ASCIIEncoding.ASCII.GetString (buf);
-		Debug.Log ("ProcessDownBuf: " + bufString);
+		Debug.Log ("ProcessDownBuf:     " + bufString);
 
 		string[] pairs = bufString.Split('&');
 
@@ -195,12 +195,10 @@ public class SocketObject {
 			} else if (pair [0].Equals (Constants.sfState)) {
 
 				if (pair [1].Equals (Constants.sfPaused)) {
-					// LOGIC FOR PAUSING THE GAME.
-					Debug.Log ("state=" + Constants.sfPaused);		
+					// LOGIC FOR PAUSING THE GAME.	
 					GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().TogglePause (true);
 				} else if (pair [1].Equals (Constants.sfRunning)) {
 					// LOGIC TO RESUME THE GAME.
-					Debug.Log ("state=" + Constants.sfRunning);
 					GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().TogglePause (false);
 				}
 				GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().ShowState (pair [1]);

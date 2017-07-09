@@ -66,7 +66,7 @@ public class NetworkRoutines : MonoBehaviour {
 			yield return connection.Send ();
 
 			if (connection.isError) {
-				//Debug.Log(serverError + connection.error);
+				Debug.Log(serverError + connection.error);
 			}
 			else {
 				string response = connection.downloadHandler.text;

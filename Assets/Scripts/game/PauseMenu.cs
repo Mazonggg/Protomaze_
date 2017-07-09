@@ -22,7 +22,6 @@ public class PauseMenu : MonoBehaviour {
 	void Update(){
 		
 		if (Input.GetKeyDown(KeyCode.Escape)) {
-			//TogglePause (!gamePaused);
 			if (gamePaused) {
 				Resume ();
 			} else {
@@ -32,7 +31,6 @@ public class PauseMenu : MonoBehaviour {
 	}
 
 	public void Pause() {
-		//TogglePause (true);
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
 			NetworkRoutines.EmptyCallback,
 			new string[] { "req", "sessionId" },
@@ -40,7 +38,6 @@ public class PauseMenu : MonoBehaviour {
 	}
 
 	public void Resume() {
-		//TogglePause (false);
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
 			NetworkRoutines.EmptyCallback,
 			new string[] { "req", "sessionId" },
@@ -61,13 +58,10 @@ public class PauseMenu : MonoBehaviour {
 
 	public void TogglePause(bool stop) {
 
-		Debug.Log("TogglePause start: " + gamePaused);
 		pauseMenuCanvas.SetActive(stop);
 		gamePaused = stop;
 
-		Debug.Log("TogglePause end: " + gamePaused);
 		Time.timeScale = (stop ? 0f : 1f);
-		// LOGIC TO RESUME GAME.
 	}
 
 	// TODO dev. helper
