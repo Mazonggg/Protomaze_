@@ -23,6 +23,10 @@ public class SocketObject {
 
 	private IPEndPoint endPoint = new IPEndPoint(IPv4, port);
 
+	private UserController userController;
+	private PauseMenu pauseMenu;
+	private TimerScript timerScript;
+
 	public SocketObject(int timer){
 		
 		// Create the socket, that communicates with server.
@@ -46,6 +50,12 @@ public class SocketObject {
 			HandleSessionStart,
 			new string[] {"req", "sessionId"}, 
 			new string[] {"startSession", sessionId});
+
+		// Gather scripts, that are frequently referenced.
+		userController = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().userController;
+		pauseMenu = GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ();
+		timerScript = GameObject.Find ("TimerText").GetComponent<TimerScript> ();
+
 		WorkOnSocket ();
 	}
 
@@ -69,7 +79,7 @@ public class SocketObject {
 			} else if (pair[0].Equals ("un")) {
 				user_name = pair[1];
 				//Debug.Log ("HandleSessionStart() 2");
-				GameObject.Find ("UserController").GetComponent<UserController> ().AddUser (user_ref, user_id, user_name);
+				userController.AddUser (user_ref, user_id, user_name);
 			}
 		}
 	}
@@ -105,7 +115,7 @@ public class SocketObject {
 			// Transmitted data
 			currentTime = Time.realtimeSinceStartup;
 			// Only tick, if changes in game state is found and time since last tick fits tickrate.
-			User usr = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.ThisUser;
+			User usr = userController.ThisUser;
 			// Debug.Log ("TellSocket: usr.Updated=" + usr.Updated);
 			if (usr.Updated && (currentTime - lastDatagram > 0.04)) {
 			//if (/*usr.Updated && */(currentTime - lastDatagram > 0.04)) {
@@ -117,10 +127,11 @@ public class SocketObject {
 		//Debug.Log ("Ende TellSocket()");
 	}
 
-	private int counting = 0;
+	/// <summary>
+	/// Converts the information of the user and sends it as datagram to server.
+	/// </summary>
 	private void SendDatagram() {
-
-		//sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes ("HALLO " + counting++);
+		
 		string info = CollectUserData ();
 		//Debug.Log ("SendDatagram=" + info);
 		sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (info);
@@ -191,21 +202,24 @@ public class SocketObject {
 				float.TryParse (pos [2], out rotZ);
 
 				//Debug.Log ("2. user_id=" + user_id);
-				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
+				userController.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
 			} else if (pair [0].Equals (Constants.sfState)) {
 
 				if (pair [1].Equals (Constants.sfPaused)) {
 					// LOGIC FOR PAUSING THE GAME.	
-					GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().TogglePause (true);
+					pauseMenu.TogglePause (true);
 				} else if (pair [1].Equals (Constants.sfRunning)) {
 					// LOGIC TO RESUME THE GAME.
-					GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().TogglePause (false);
+					pauseMenu.TogglePause (false);
+				} else if (pair [1].Equals (Constants.sfError)) {
+					// LOGIC TO QUIT THE GAME.
+					pauseMenu.Quit ();
 				}
-				GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().ShowState (pair [1]);
+				pauseMenu.ShowState (pair [1]);
 			} else if(pair[0].Equals (Constants.sfTimer)) {
 				int time = 0;
 				int.TryParse (pair [1], out time);
-				GameObject.Find ("TimerText").GetComponent<TimerScript> ().SetTimer (time);
+				timerScript.SetTimer (time);
 			}
 		}
 	}
@@ -217,11 +231,9 @@ public class SocketObject {
 	/// <returns>The user data.</returns>
 	private string CollectUserData() {
 		
-		UserController usContr = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().userController;
-		User thisUse = usContr.ThisUser;
+		User thisUse = userController.ThisUser;
 
-		bool updated = thisUse.Updated;
-		if (updated) {
+		if (thisUse.Updated) {
 			UpdateData userData = thisUse.UpdateData;
 
 			string msg = "t=";

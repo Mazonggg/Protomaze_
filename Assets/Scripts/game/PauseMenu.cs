@@ -53,6 +53,8 @@ public class PauseMenu : MonoBehaviour {
 	}
 
 	private void StartMainMenu(string[][] response){
+
+		// TODO Logic to delete session.
 		SceneManager.LoadScene ("Menu");
 	}
 
