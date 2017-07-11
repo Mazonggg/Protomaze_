@@ -60,7 +60,7 @@ public class NetworkRoutines : MonoBehaviour {
 	/// <param name="param">Parameter.</param>
 	private IEnumerator MakeRequest(Action<string[][]> callback, string request) {
 		
-		//Debug.Log ("MakeRequest: " + request);
+		Debug.Log ("MakeRequest: " + request);
 		using (connection = UnityWebRequest.Get (request)) {
 			
 			yield return connection.Send ();

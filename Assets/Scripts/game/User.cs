@@ -33,11 +33,7 @@ public class User : GObject {
 
 	//private int id = -1;
 	private int Id {
-		get { 
-			//Debug.Log ("User.Id");
-			return UserStatics.IdSelf; 
-		}
-		//set { id = value; Constants.userIds [0] = value; }
+		get { return UserStatics.IdSelf; }
 	}
 
 	private string UserName {
@@ -77,9 +73,4 @@ public class User : GObject {
 			Move (dir, Constants.moveSpeed);
 		}
 	}
-
-	/*public string GetUserInfo() {
-		string ret = "id=" + Constants.userIds [0];
-		return ret + " " + ObjectName;
-	}*/
 }

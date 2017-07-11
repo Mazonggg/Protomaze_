@@ -13,11 +13,6 @@ public class GObject : MonoBehaviour {
 	/// Database Id of this object on server.
 	/// </summary>
 	private int id = -1;
-	/*public int Id
-	{
-		get { return id; }
-		set { id = value; }
-	}*/
 
 	/// <summary>
 	/// Tells, if the object currently moves or is moved by a user.
@@ -27,14 +22,7 @@ public class GObject : MonoBehaviour {
 		get { return active; }
 		set { active = value; }
 	}
-	/// <summary>
-	/// Database Id of session on server.
-	/// </summary>
-    /*private int ssId = -1;
-    public int SsId {
-		get { return Constants.sessionId; }
-		set { Constants.sessionId = value; }
-    }*/
+
 	/// <summary>
 	/// true, if changed since last time data where referenced.
 	/// </summary>
@@ -61,9 +49,7 @@ public class GObject : MonoBehaviour {
 	/// </summary>
 	public void Restart() {
 		transform.position = new Vector3 (0, 0, 0);
-		/*transform.rotation.x = 0;
-		transform.rotation.y = 0;
-		transform.rotation.z = 0;*/
+		transform.rotation = Quaternion.Euler (0, 0, 0);
 		updated = true;
 	}
 
@@ -75,9 +61,7 @@ public class GObject : MonoBehaviour {
 	public void Place(Vector3 pos, Vector3 rot, bool visible) {
 
 		transform.position = pos;
-		/*transform.rotation.x = rot.x;
-		transform.rotation.y = rot.y;
-		transform.rotation.z = rot.z;*/
+		transform.rotation = Quaternion.Euler (rot);
 
 		GetComponent<MeshRenderer> ().enabled = visible;
 	}

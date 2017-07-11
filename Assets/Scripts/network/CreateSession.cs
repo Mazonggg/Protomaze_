@@ -15,11 +15,6 @@ public class CreateSession : MonoBehaviour {
         users = new Text[] { user_a, user_b, user_c, user_d };
         
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     public void goBack() {
         GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
@@ -49,16 +44,13 @@ public class CreateSession : MonoBehaviour {
 		foreach (string[] pair in response) {
 
 			if (pair [0].Equals ("type") && pair [1].Equals ("ERROR")) {
-
-				Debug.Log ("Couldn't create Session!");
+				
+				GameObject.Find ("ErrorText").GetComponent<ErrorText> ().ShowError ("Couldn't create Session!");
 				return;
 			}
 			if(pair[0].Equals("sessionId")) {
 				int.TryParse(pair[1], out SsIdTmp);
 				UserStatics.SessionId = SsIdTmp;
-                // GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
-                // Constants.SoftwareModel.SocketObj.WorkOnSocket();
-                // Debug.Log ("ssId=" + Constants.SoftwareModel.UserHandler.ThisUser.SsId + " tmp=" + SsIdTmp);
 				mainMenuCanvas.SetActive(false);
 				createSessionCanvas.SetActive(true);
                 StartUpdateLobby();
@@ -72,10 +64,9 @@ public class CreateSession : MonoBehaviour {
         while (true) {
 			
 			string userSession = UserStatics.SessionId.ToString();
-            //string userSession = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId.ToString();
 			GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
                 UpdateView,
-                new string[] { "req", "sessionID" },
+                new string[] { "req", "sessionId" },
                 new string[] { "getPlayerInSession", userSession });
 
 

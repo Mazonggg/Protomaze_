@@ -31,6 +31,21 @@ public class UserStatics {
 	}
 
 	/// <summary>
+	/// Checks if a user id is in session.
+	/// </summary>
+	/// <returns><c>true</c>, if is in was usered, <c>false</c> otherwise.</returns>
+	/// <param name="user_id">User identifier.</param>
+	public static bool UserIsIn(int user_id) {
+
+		foreach (int userId in userIds) {
+			if (userId == user_id) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/// <summary>
 	/// Determines if the given index of the player in the game represents myself.
 	/// </summary>
 	/// <returns><c>true</c> if is my self the specified index_in_game; otherwise, <c>false</c>.</returns>

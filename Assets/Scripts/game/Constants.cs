@@ -24,4 +24,5 @@ public sealed class Constants {
 	public static string sfRunning = "RUNNING";
 	public static string sfPConnected = "CONNECTED";
 	public static string sfError = "ERROR";
+	public static string sfHint = "HINT";
 }

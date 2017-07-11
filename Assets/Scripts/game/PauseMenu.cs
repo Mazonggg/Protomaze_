@@ -35,6 +35,7 @@ public class PauseMenu : MonoBehaviour {
 			NetworkRoutines.EmptyCallback,
 			new string[] { "req", "sessionId" },
 			new string[] { "pauseSession", UserStatics.SessionId.ToString() });
+		TogglePause (true);
 	}
 
 	public void Resume() {
@@ -42,6 +43,7 @@ public class PauseMenu : MonoBehaviour {
 			NetworkRoutines.EmptyCallback,
 			new string[] { "req", "sessionId" },
 			new string[] { "resumeSession", UserStatics.SessionId.ToString() });
+		TogglePause (false);
 	}
 
 	public void Quit() {

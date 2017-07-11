@@ -23,6 +23,10 @@ public class SocketObject {
 
 	private IPEndPoint endPoint = new IPEndPoint(IPv4, port);
 
+	private UserController userController;
+	private TimerScript timerScript;
+	private PauseMenu pauseMenu;
+
 	public SocketObject(int timer){
 		
 		// Create the socket, that communicates with server.
@@ -30,22 +34,25 @@ public class SocketObject {
 
 		string userId = UserStatics.GetUserId(0).ToString();
 		string sessionId = UserStatics.SessionId.ToString();
-		// TODO only call Socket, when this user is the creater of the session!
-		if (UserStatics.IsCreater) {
 
-			// Debug.Log ("I AM THE CREATER!");
+		if (UserStatics.IsCreater) {
+			
 			GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().netwRout.UDPRequest (
 				NetworkRoutines.EmptyCallback,
 				new string[] { "userId", "timer", "sessionId" }, 
 				new string[] { userId, timer.ToString(),  sessionId});
 
 		}
-		//Debug.Log ("sessionId=" + SessionId);
 
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest (
 			HandleSessionStart,
 			new string[] {"req", "sessionId"}, 
 			new string[] {"startSession", sessionId});
+
+		userController = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().userController;
+		pauseMenu = GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ();
+		timerScript = GameObject.Find ("TimerText").GetComponent<TimerScript> ();
+
 		WorkOnSocket ();
 	}
 
@@ -54,8 +61,6 @@ public class SocketObject {
 	/// </summary>
 	/// <param name="response">Response.</param>
 	private void HandleSessionStart(string[][] response) {
-		
-		//Debug.Log ("HandleSessionStart()");
 
 		string user_ref = "";
 		int user_id = 0;
@@ -68,8 +73,7 @@ public class SocketObject {
 				int.TryParse(pair[1], out user_id);
 			} else if (pair[0].Equals ("un")) {
 				user_name = pair[1];
-				//Debug.Log ("HandleSessionStart() 2");
-				GameObject.Find ("UserController").GetComponent<UserController> ().AddUser (user_ref, user_id, user_name);
+				userController.AddUser (user_ref, user_id, user_name);
 			}
 		}
 	}
@@ -79,8 +83,7 @@ public class SocketObject {
 	/// Connection issues can be caught here.
 	/// </summary>
 	private void WorkOnSocket(){
-
-		//active = true;
+		
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().StartCoroutine (TellSocket());
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().StartCoroutine (ListenToSocket());
     }
@@ -101,28 +104,23 @@ public class SocketObject {
 
 		SendDatagram();
 		while (true) {
-			//Debug.Log ("TELL");
 			// Transmitted data
 			currentTime = Time.realtimeSinceStartup;
 			// Only tick, if changes in game state is found and time since last tick fits tickrate.
-			User usr = GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.ThisUser;
-			// Debug.Log ("TellSocket: usr.Updated=" + usr.Updated);
+			User usr = userController.ThisUser;
+
 			if (usr.Updated && (currentTime - lastDatagram > 0.04)) {
-			//if (/*usr.Updated && */(currentTime - lastDatagram > 0.04)) {
 				SendDatagram ();
 				lastDatagram = currentTime;
 			}
 			yield return null;
 		}
-		//Debug.Log ("Ende TellSocket()");
 	}
 
 	private int counting = 0;
 	private void SendDatagram() {
-
-		//sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes ("HALLO " + counting++);
+		
 		string info = CollectUserData ();
-		//Debug.Log ("SendDatagram=" + info);
 		sendBuf = System.Text.ASCIIEncoding.ASCII.GetBytes (info);
 		sendBytes = socket.SendTo (sendBuf, endPoint);
 	}
@@ -139,7 +137,6 @@ public class SocketObject {
 		yield return new WaitForSeconds(1f);
 
 		while (true) {
-			//Debug.Log ("LISTEN");
 			yield return null;
 			if (socket.Poll(0, SelectMode.SelectRead)) {
 				int bytesReceived = socket.Receive(receiveBuf, 0, receiveBuf.Length, SocketFlags.None);
@@ -159,8 +156,7 @@ public class SocketObject {
 	private void ProcessDownBuf(byte[] buf) {
 
 		string bufString = System.Text.ASCIIEncoding.ASCII.GetString (buf);
-		Debug.Log ("ProcessDownBuf:     " + bufString);
-
+		Debug.Log ("ProcessDownBuf: " + bufString);
 		string[] pairs = bufString.Split('&');
 
 		for (int i = 0; i < pairs.Length; i++) {
@@ -169,7 +165,6 @@ public class SocketObject {
 				
 				int user_id = -1;
 				int.TryParse (pair [1], out user_id);
-				// Debug.Log ("1. user_id=" + user_id);
 				string[] posRot = pairs [i + 1].Split ('=')[1].Split(';');
 				string[] pos = posRot [0].Split('_');
 				string[] rot = posRot [1].Split('_');
@@ -190,35 +185,32 @@ public class SocketObject {
 				float.TryParse (pos [1], out rotY);
 				float.TryParse (pos [2], out rotZ);
 
-				//Debug.Log ("2. user_id=" + user_id);
-				GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().userController.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
+				userController.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
 			} else if (pair [0].Equals (Constants.sfState)) {
 
 				if (pair [1].Equals (Constants.sfPaused)) {
 					// LOGIC FOR PAUSING THE GAME.	
-					GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().TogglePause (true);
+					pauseMenu.TogglePause (true);
 				} else if (pair [1].Equals (Constants.sfRunning)) {
 					// LOGIC TO RESUME THE GAME.
-					GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().TogglePause (false);
+					pauseMenu.TogglePause (false);
 				}
-				GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ().ShowState (pair [1]);
+				pauseMenu.ShowState (pair [1]);
 			} else if(pair[0].Equals (Constants.sfTimer)) {
 				int time = 0;
 				int.TryParse (pair [1], out time);
-				GameObject.Find ("TimerText").GetComponent<TimerScript> ().SetTimer (time);
+				timerScript.SetTimer (time);
 			}
 		}
 	}
 
-	int counter = 0;
 	/// <summary>
 	/// Collects the data relevant for server update of this player and converts it to string convention.
 	/// </summary>
 	/// <returns>The user data.</returns>
 	private string CollectUserData() {
 		
-		UserController usContr = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().userController;
-		User thisUse = usContr.ThisUser;
+		User thisUse = userController.ThisUser;
 
 		bool updated = thisUse.Updated;
 		if (updated) {
@@ -250,8 +242,6 @@ public class SocketObject {
 					userData.ObjectHeld.Rotation.y + "_" +
 					userData.ObjectHeld.Rotation.z;
 			}
-
-			//Debug.Log("CollectUserData: " + msg);
 			return msg;
 		}
 		return "";

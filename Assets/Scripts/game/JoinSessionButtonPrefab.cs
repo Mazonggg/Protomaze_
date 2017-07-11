@@ -30,6 +30,17 @@ public class JoinSessionButtonPrefab : MonoBehaviour {
             new string[] { "joinSession", sessionIDText.text, userId });
     }
 
+	/// <summary>
+	/// Changes the color of the field.
+	/// </summary>
+	/// <param name="color">Color.</param>
+	public void ChangeColor() {
+
+		ColorBlock colors = joinSessionButton.colors;
+		colors.normalColor = new Color (0.8f, 0.9f, 1f);
+		joinSessionButton.colors = colors;
+	}
+
 
     public void SetSessionIdAndGoToLobby(string[][] response) {
 
@@ -37,15 +48,14 @@ public class JoinSessionButtonPrefab : MonoBehaviour {
 
         foreach (string[] pair in response) {
 
-            if (pair[0].Equals("type") && pair[1].Equals("ERROR")) {
+			/*if (pair[0].Equals("type") && pair[1].Equals(Constants.sfHint)) {
 
                 Debug.Log("User already assigned to a session or Session does not exist!");
                 return;
-            }
+            }*/
             if (pair[0].Equals("sessionId")) {
                 int.TryParse(pair[1], out SsIdTmp);
 				UserStatics.SessionId = SsIdTmp;
-                // GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().UserHandler.ThisUser.SsId = SsIdTmp;
 
                 joinSessionCanvas.SetActive(false);
                 createSessionCanvas.SetActive(true);

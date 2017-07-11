@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Text.RegularExpressions;
 
 
@@ -44,12 +45,17 @@ public class JoinSession : MonoBehaviour {
         int count = 0;
 		if(sessionList != null){
         	for (int i = 0; i < sessionList.Length; i++) {
-        	    GameObject newButton = (GameObject)Instantiate(JoinButton);
-        	    newButton.GetComponent<JoinSessionButtonPrefab>().SetUp(sessionList[i][0], sessionList[i][1]);
-        	    Vector3 scale= JoinSessionCanvas.transform.lossyScale;  //die und folgende Zeile war eine schwere Geburt ...
-        	    newButton.transform.localScale = scale;     
-        	    newButton.transform.SetParent(content.transform);
-        	    count = i;
+				
+				GameObject newButton = (GameObject)Instantiate (JoinButton);
+				newButton.GetComponent<JoinSessionButtonPrefab> ().SetUp (sessionList [i] [0], sessionList [i] [1]);
+
+				Vector3 scale = JoinSessionCanvas.transform.lossyScale;  //die und folgende Zeile war eine schwere Geburt ...
+				newButton.transform.localScale = scale;     
+				newButton.transform.SetParent (content.transform);
+				if (sessionList [i] [1].Equals ("_")) {
+					newButton.GetComponent<Image> ().enabled = false;
+				} 
+				count = i;
         	}
         	RectTransform newRT = content.GetComponent<RectTransform>();        //to get the RectTransform from content
         	newRT.sizeDelta = new Vector2(0, count * 100);                      //and strech it to fit all Buttons
@@ -57,12 +63,11 @@ public class JoinSession : MonoBehaviour {
     }
 
     public void GetSessions() {
-
-		Debug.Log ("GetSessions");
+		
 		GameObject.Find(Constants.softwareModel).GetComponent<SoftwareModel>().netwRout.TCPRequest(
             ListAllSessions,
-            new string[] { "req" },
-            new string[] { "getSessions"});
+            new string[] { "req", "userId" },
+			new string[] { "getSessions", UserStatics.IdSelf.ToString() });
     }
 
     private void ListAllSessions(string[][] response) {

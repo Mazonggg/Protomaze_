@@ -20,22 +20,7 @@ public class SoftwareModel : MonoBehaviour {
 		get { return socketObj; }
 		set { socketObj = value; }
 	}
-
-	private int i = 0;
-    // Use this for initialization
-    void Start () {
 		
-		//gameObject.AddComponent<User> ();
-		//userHandler = new UserHandler (GameObject.Find("User").GetComponent<User>());
-		/*try {
-			userHandler = GameObject.Find ("UserController").GetComponent<UserHandler> ();
-			//Debug.Log("userHandler found");
-		} catch (Exception x) {}
-		//UserHandler.AddUser (GameObject.Find ("User").GetComponent<User> ());
-		//socketObj = new SocketObject ();
-		netwRout = gameObject.GetComponent<NetworkRoutines> ();*/
-	}
-
 	public void PlaceUser() {
 
 		if (userController != null) {
@@ -47,10 +32,5 @@ public class SoftwareModel : MonoBehaviour {
 	public void CreateSocketObject(int timer){
 		
 		socketObj = new SocketObject (timer);
-	}
-
-	public void DestroySocketObject() {
-
-		socketObj = null;
 	}
 }
