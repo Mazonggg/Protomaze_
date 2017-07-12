@@ -52,7 +52,9 @@ public class JoinSession : MonoBehaviour {
 				Vector3 scale = JoinSessionCanvas.transform.lossyScale;  //die und folgende Zeile war eine schwere Geburt ...
 				newButton.transform.localScale = scale;     
 				newButton.transform.SetParent (content.transform);
-				if (sessionList [i] [1].Equals ("_")) {
+				Debug.Log ("sessionList.Length=" + sessionList.Length + " ; sessionList[i].Length=" + sessionList [i].Length);
+				Debug.Log ("sessionList[i][0]=" + sessionList [i][0] + " ; sessionList[i][1]=" + sessionList [i][1]);
+				if (sessionList [i][1].Equals ("_")) {
 					newButton.GetComponent<Image> ().enabled = false;
 				} 
 				count = i;
@@ -83,15 +85,19 @@ public class JoinSession : MonoBehaviour {
 		if (!ret.Equals ("")) { 
 			string pattern = @"//|--";
 			string[] sessionsAndLeader = Regex.Split (ret.TrimEnd ('-'), pattern);
-			int i = 0;
 			string[][] sessionList = new string[sessionsAndLeader.Length / 2][];
 			for (int j = 0; j < sessionList.Length; j++) {
 				sessionList [j] = new string[2];
 			}
 
+			int i = 0;
 			foreach (string element in sessionsAndLeader) {
-				sessionList [i / 2] [i % 2] = element;
-				i++;
+				Debug.Log ("element=" + element);
+				//if (sessionList.Length > 1 && sessionList [i / 2].Length > 1) {
+					sessionList [i / 2] [i % 2] = element;
+					Debug.Log("sessionList[i / 2] [i % 2]: " + (i / 2) + "," + (i % 2) + "=" + sessionList [i / 2] [i % 2]);
+					i++;
+				//}
 			}
 			AddButtons (sessionList);
 		} else {
