@@ -24,8 +24,13 @@ public class SocketObject {
 	private IPEndPoint endPoint = new IPEndPoint(IPv4, port);
 
 	private UserController userController;
+<<<<<<< HEAD
 	private TimerScript timerScript;
 	private PauseMenu pauseMenu;
+=======
+	private PauseMenu pauseMenu;
+	private TimerScript timerScript;
+>>>>>>> f4f3cf4efe0b443a93cf189b6399fddcb59a910e
 
 	public SocketObject(int timer){
 		
@@ -49,6 +54,10 @@ public class SocketObject {
 			new string[] {"req", "sessionId"}, 
 			new string[] {"startSession", sessionId});
 
+<<<<<<< HEAD
+=======
+		// Gather scripts, that are frequently referenced.
+>>>>>>> f4f3cf4efe0b443a93cf189b6399fddcb59a910e
 		userController = GameObject.Find (Constants.softwareModel).GetComponent<SoftwareModel> ().userController;
 		pauseMenu = GameObject.Find ("PauseMenuController").GetComponent<PauseMenu> ();
 		timerScript = GameObject.Find ("TimerText").GetComponent<TimerScript> ();
@@ -73,6 +82,10 @@ public class SocketObject {
 				int.TryParse(pair[1], out user_id);
 			} else if (pair[0].Equals ("un")) {
 				user_name = pair[1];
+<<<<<<< HEAD
+=======
+				//Debug.Log ("HandleSessionStart() 2");
+>>>>>>> f4f3cf4efe0b443a93cf189b6399fddcb59a910e
 				userController.AddUser (user_ref, user_id, user_name);
 			}
 		}
@@ -108,7 +121,11 @@ public class SocketObject {
 			currentTime = Time.realtimeSinceStartup;
 			// Only tick, if changes in game state is found and time since last tick fits tickrate.
 			User usr = userController.ThisUser;
+<<<<<<< HEAD
 
+=======
+			// Debug.Log ("TellSocket: usr.Updated=" + usr.Updated);
+>>>>>>> f4f3cf4efe0b443a93cf189b6399fddcb59a910e
 			if (usr.Updated && (currentTime - lastDatagram > 0.04)) {
 				SendDatagram ();
 				lastDatagram = currentTime;
@@ -117,7 +134,9 @@ public class SocketObject {
 		}
 	}
 
-	private int counting = 0;
+	/// <summary>
+	/// Converts the information of the user and sends it as datagram to server.
+	/// </summary>
 	private void SendDatagram() {
 		
 		string info = CollectUserData ();
@@ -185,6 +204,10 @@ public class SocketObject {
 				float.TryParse (pos [1], out rotY);
 				float.TryParse (pos [2], out rotZ);
 
+<<<<<<< HEAD
+=======
+				//Debug.Log ("2. user_id=" + user_id);
+>>>>>>> f4f3cf4efe0b443a93cf189b6399fddcb59a910e
 				userController.UpdateUser(new UpdateData(user_id, new Vector3(posX, posY, posZ), new Vector3(rotX, rotY, rotZ)));
 			} else if (pair [0].Equals (Constants.sfState)) {
 
@@ -194,6 +217,12 @@ public class SocketObject {
 				} else if (pair [1].Equals (Constants.sfRunning)) {
 					// LOGIC TO RESUME THE GAME.
 					pauseMenu.TogglePause (false);
+<<<<<<< HEAD
+=======
+				} else if (pair [1].Equals (Constants.sfError)) {
+					// LOGIC TO QUIT THE GAME.
+					pauseMenu.Quit ();
+>>>>>>> f4f3cf4efe0b443a93cf189b6399fddcb59a910e
 				}
 				pauseMenu.ShowState (pair [1]);
 			} else if(pair[0].Equals (Constants.sfTimer)) {
@@ -212,8 +241,7 @@ public class SocketObject {
 		
 		User thisUse = userController.ThisUser;
 
-		bool updated = thisUse.Updated;
-		if (updated) {
+		if (thisUse.Updated) {
 			UpdateData userData = thisUse.UpdateData;
 
 			string msg = "t=";
